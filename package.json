@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/melvincarvalho/aam/issues"
   },
-  "homepage": "https://github.com/melvincarvalho/aam#readme"
+  "homepage": "https://github.com/melvincarvalho/aam#readme",
+  "dependencies": {
+    "minimist": "^1.2.5"
+  }
 }
