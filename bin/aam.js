@@ -7,13 +7,22 @@ const { aam_search } = require('../lib/')
 
 // MODEL
 globalThis.data = {
+  command: 'search',
   term: 'aam'
 }
 // console.log('data', data, argv)
 
 // INIT
-data.term = argv._[0] || data.term
+data.command = argv._[0] || data.command
+data.term = argv._[1] || data.term
 
 // MAIN
-const res = aam_search(data.term)
-console.log(res)
+if (data.command === 'search') {
+  let res = aam_search(data.term)
+  console.log(res)
+} else if (data.command === 'install') {
+  let res = aam_search(data.term)
+  console.log('git install ' + res?.repository)
+} else {
+  console.log('command not found')
+}
