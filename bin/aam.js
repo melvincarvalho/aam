@@ -22,7 +22,7 @@ if (data.command === 'search') {
   console.log(res)
 } else if (data.command === 'install') {
   let res = aam_search(data.term)
-  console.log('git install ' + res?.repository)
+  console.log('git clone ' + res?.repository)
 } else {
   console.log('command not found')
 }

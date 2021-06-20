@@ -1,7 +1,16 @@
-[{
-  "@id": "gitmark:ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0",
-  "genesis": "gitmark:ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0",
-  "nick": "aam",
-  "package": "./package.json",
-  "repository": "https://github.com/melvincarvalho/aam.git"
-}]
+[
+  {
+    "@id": "gitmark:ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0",
+    "genesis": "gitmark:ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0",
+    "nick": "aam",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/aam.git"
+  },
+  {
+    "@id": "gitmark:1bd7af0ad65c5e93ce732917f8bfccc4bfb64dde815948c6ee3002476df81bd5:0",
+    "genesis": "gitmark:1bd7af0ad65c5e93ce732917f8bfccc4bfb64dde815948c6ee3002476df81bd5:0",
+    "nick": "chores",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/chores.git"
+  }
+]
