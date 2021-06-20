@@ -1,3 +1,7 @@
 {
-  "genesis": "ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0"
+  "@id": "gitmark:ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0",
+  "genesis": "gitmark:ee2750cd0df229eb616a10cfc37cd835daa5e51237e2272746c679670c27a717:0",
+  "nick": "aam",
+  "package": "./package.json",
+  "repository": "https://github.com/melvincarvalho/aam.git"
 }
