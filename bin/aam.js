@@ -26,7 +26,7 @@ if (data.command === 'search') {
   console.log('git clone ' + res?.repository)
 } else if (data.command === 'create') {
   let res = aam_search(data.defaultCreate)
-  console.log('git clone ' + res?.repository)
+  console.log('git clone --depth 1 ' + res?.repository)
 } else {
   console.log('command not found')
 }

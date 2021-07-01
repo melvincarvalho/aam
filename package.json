@@ -1,6 +1,6 @@
 {
   "name": "aam",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "autonomous agent manager",
   "main": "index.js",
   "scripts": {
