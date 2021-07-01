@@ -12,5 +12,12 @@
     "nick": "chores",
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/chores.git"
+  },
+  {
+    "@id": "gitmark:08ab4aec86912e5e7be2cf85b7892818e5b2d9e1fe7719460f9ccbfcc444b340:0",
+    "genesis": "gitmark:08ab4aec86912e5e7be2cf85b7892818e5b2d9e1fe7719460f9ccbfcc444b340:0",
+    "nick": "template",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/template.git"
   }
 ]
