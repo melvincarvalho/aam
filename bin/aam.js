@@ -3,7 +3,7 @@
 // IMPORTS
 // var fs = require('fs')
 var argv = require('minimist')(process.argv.slice(2))
-const { aam_search } = require('../lib/')
+const { aam_search, aam_skill } = require('../lib/')
 
 // MODEL
 globalThis.data = {
@@ -32,6 +32,13 @@ if (data.command === 'search') {
   console.log('cd ' + (argv._[2] || data.term))
   console.log('npm install')
   console.log('npm run')
+} else if (data.command === 'skill') {
+  data.term = argv._[1] || data.term
+  data.directory = argv._[2] || data.directory
+  const res = aam_skill(data.term)
+  // console.log(res)
+  console.log('run:')
+  console.log('curl ' + res?.install)
 } else if (data.command === 'create') {
   let res = aam_search(data.defaultCreate)
   data.directory = argv._[1] || data.directory

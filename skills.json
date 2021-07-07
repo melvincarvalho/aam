@@ -1,0 +1,8 @@
+[
+  {
+    "nick": "skill-serve",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-serve.git",
+    "install": "https://raw.githubusercontent.com/melvincarvalho/skill-serve/gh-pages/INSTALL"
+  }
+]
