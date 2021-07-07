@@ -37,7 +37,7 @@ if (data.command === 'search') {
   data.directory = argv._[2] || data.directory
   const res = aam_skill(data.term)
   // console.log(res)
-  console.log('run:')
+  console.error('run:')
   console.log('curl ' + res?.install)
 } else if (data.command === 'create') {
   let res = aam_search(data.defaultCreate)
