@@ -31,7 +31,7 @@ if (data.command === 'search') {
   console.log('git clone ' + res?.repository + ' ' + (argv._[2] || ''))
   console.log('cd ' + (argv._[2] || data.term))
   console.log('npm install')
-  console.log('npm run')
+  console.log('npm start')
 } else if (data.command === 'skill') {
   data.term = argv._[1] || data.term
   data.directory = argv._[2] || data.directory
