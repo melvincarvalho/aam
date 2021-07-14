@@ -22,30 +22,30 @@ if (data.command === 'search') {
   let res = aam_search(data.term)
   data.term = argv._[1] || data.term
   console.log(res)
-} else if (data.command === 'install') {
+} else if (data.command === 'install' || data.command === 'i') {
   data.term = argv._[1] || data.term
   data.directory = argv._[2] || data.directory
   const res = aam_search(data.term)
   console.error(res)
   console.error('run:')
-  console.log('git clone ' + res?.repository + ' ' + (argv._[2] || ''))
-  console.log('cd ' + (argv._[2] || data.term))
-  console.log('npm install')
-  console.log('npm start')
+  console.log('git clone ' + res?.repository + ' ' + (argv._[2] || '') + ' ;')
+  console.log('cd ' + (argv._[2] || data.term) + ' ;')
+  console.log('npm install ;')
+  console.log('npm start ;')
 } else if (data.command === 'skill') {
   data.term = argv._[1] || data.term
   data.directory = argv._[2] || data.directory
   const res = aam_skill(data.term)
   // console.log(res)
   console.error('run:')
-  console.log('curl ' + res?.install)
+  console.log('curl ' + res?.install + ' ;')
 } else if (data.command === 'create') {
   let res = aam_search(data.defaultCreate)
   data.directory = argv._[1] || data.directory
   console.log('run:')
-  console.log('git clone --depth 1 ' + res?.repository + ' ' + (argv._[1] || ''))
-  console.log('cd ' + data.directory)
-  console.log('rm -rf .git')
+  console.log('git clone --depth 1 ' + res?.repository + ' ' + (argv._[1] || '') + ' ;')
+  console.log('cd ' + data.directory + ' ;')
+  console.log('rm -rf .git' + ' ;')
 } else {
   console.log('command not found')
 }
