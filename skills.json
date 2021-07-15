@@ -4,5 +4,11 @@
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/skill-serve.git",
     "install": "https://raw.githubusercontent.com/melvincarvalho/skill-serve/gh-pages/INSTALL"
+  },
+  {
+    "nick": "skill-updater",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-updater.git",
+    "install": "https://raw.githubusercontent.com/melvincarvalho/skill-updater/gh-pages/INSTALL"
   }
 ]
