@@ -10,5 +10,11 @@
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/skill-updater.git",
     "install": "https://raw.githubusercontent.com/melvincarvalho/skill-updater/gh-pages/INSTALL"
+  },
+  {
+    "nick": "skill-git",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-git.git",
+    "install": "https://raw.githubusercontent.com/melvincarvalho/skill-git/gh-pages/INSTALL"
   }
 ]
