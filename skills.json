@@ -16,5 +16,11 @@
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/skill-git.git",
     "install": "https://raw.githubusercontent.com/melvincarvalho/skill-git/gh-pages/INSTALL"
+  },
+  {
+    "nick": "skill-npm",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-npm.git",
+    "install": "https://raw.githubusercontent.com/melvincarvalho/skill-npm/gh-pages/INSTALL"
   }
 ]
