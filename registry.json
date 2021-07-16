@@ -19,5 +19,12 @@
     "nick": "template",
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/template.git"
+  },
+  {
+    "@id": "gitmark:71646f387fec48e3f31a78b93f1960910d461eb2db9730baa49b05416bd3615c:0",
+    "genesis": "gitmark:71646f387fec48e3f31a78b93f1960910d461eb2db9730baa49b05416bd3615c:0",
+    "nick": "aa_faucet",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/aa_faucet.git"
   }
 ]
