@@ -34,5 +34,11 @@
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/skill-webcredits.git",
     "install": "https://raw.githubusercontent.com/melvincarvalho/skill-webcredits/gh-pages/INSTALL"
+  },
+  {
+    "nick": "skill-markserver",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-markserver.git",
+    "install": "https://raw.githubusercontent.com/melvincarvalho/skill-markserver/gh-pages/INSTALL"
   }
 ]
