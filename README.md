@@ -12,7 +12,6 @@ AAM is a library and framework to create composable autonomous agents
 #### Autonomous Agent Manager
 ---
 </div>
-![npm](https://img.shields.io/npm/v/aam)
 
 ## Features
 
