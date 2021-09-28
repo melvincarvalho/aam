@@ -24,10 +24,34 @@ AAM is a library and framework to create composable autonomous agents
 ### Install with npm
 
 ```
-npm install aam
+sudo npm -g install aam
 ```
 
 ### Create an agent
+
+```
+aam create
+```
+
+### Install an agent
+
+```
+aam install <agent>
+```
+
+### Skills
+
+```
+aam skill <skill>
+```
+
+### Search
+
+```
+aam search <nick>
+```
+
+
 
 ## License
 
