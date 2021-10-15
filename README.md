@@ -1,17 +1,24 @@
 <div align="center">
+  <h1>Autonomous Agent Manager</h1>
+</div>
 
-## AAM
+<div align="center">  
+A library and framework to create composable autonomous agents
+</div>
 
-AAM is a library and framework to create composable autonomous agents
+---
+
+<div align="center">
+<h4>Getting Started</h4>
+</div>
+  
+---
+  
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/melvincarvalho/aam/blob/gh-pages/LICENSE)
 ![npm](https://img.shields.io/npm/v/aam)
 [![npm](https://img.shields.io/npm/dw/rww.svg)](https://npmjs.com/package/rww)
 
----
-#### Autonomous Agent Manager
----
-</div>
 
 ## Features
 
