@@ -49,6 +49,8 @@ aam install <agent>
 
 ### Skills
 
+Search for composable [skills](https://github.com/topics/aam-skill)
+
 ```
 aam skill <skill>
 ```
