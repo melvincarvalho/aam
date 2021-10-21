@@ -18,6 +18,7 @@ A library and framework to create composable autonomous agents
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![npm](https://img.shields.io/npm/v/aam)](https://npmjs.com/package/aam)
 [![npm](https://img.shields.io/npm/dw/aam.svg)](https://npmjs.com/package/aam)
+[![Github Stars](https://img.shields.io/github/stars/{username}/{repo-name}.svg)](https://github.com/melvincarvalho/aam/)
 
 
 ## Features
