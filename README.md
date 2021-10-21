@@ -45,6 +45,8 @@ aam create <name>
 
 ### Install an agent
 
+Instructions to install an agent, from the agent [registry](registry.json)
+
 ```
 aam install <agent>
 ```
