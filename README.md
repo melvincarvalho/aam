@@ -37,8 +37,10 @@ sudo npm -g install aam
 
 ### Create an agent
 
+Display instructions to create an agent with a given name
+
 ```
-aam create
+aam create <name>
 ```
 
 ### Install an agent
@@ -49,7 +51,7 @@ aam install <agent>
 
 ### Skills
 
-Search for composable [skills](https://github.com/topics/aam-skill)
+Search for composable [skills](https://github.com/topics/aam-skill), from the skill [registry](skills.json)
 
 ```
 aam skill <skill>
