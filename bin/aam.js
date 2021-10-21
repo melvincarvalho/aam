@@ -16,6 +16,7 @@ globalThis.data = {
 
 // INIT
 data.command = argv._[0] || data.command
+data.term = argv._[1] || data.term
 
 // MAIN
 if (data.command === 'search') {

@@ -61,6 +61,8 @@ aam skill <skill>
 
 ### Search
 
+Search via nick for the JSON in the agent [registry](registry.json)
+
 ```
 aam search <nick>
 ```
