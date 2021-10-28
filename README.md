@@ -23,11 +23,11 @@ A library and framework to create composable autonomous agents
 
 ## Features
 
-&nbsp;&nbsp;✓&nbsp; Create autonomous agents<br>
-&nbsp;&nbsp;✓&nbsp; Composable Skills<br>
-&nbsp;&nbsp;✓&nbsp; Agent Registry<br>
-&nbsp;&nbsp;✓&nbsp; Skills Registry<br>
-&nbsp;&nbsp;✓&nbsp; Search agents and skills<br>
+&nbsp;&nbsp;✓&nbsp; Create autonomous agents  
+&nbsp;&nbsp;✓&nbsp; Composable Skills  
+&nbsp;&nbsp;✓&nbsp; Agent Registry  
+&nbsp;&nbsp;✓&nbsp; Skills Registry  
+&nbsp;&nbsp;✓&nbsp; Search agents and skills  
 
 ## Getting Started
 ### Install with npm
