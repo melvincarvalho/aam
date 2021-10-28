@@ -46,5 +46,11 @@
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/skill-profile.git",
     "install": "https://raw.githubusercontent.com/melvincarvalho/skill-profile/gh-pages/INSTALL"
+  },
+  {
+    "nick": "skill-data",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-data.git",
+    "install": "https://raw.githubusercontent.com/melvincarvalho/skill-data/gh-pages/INSTALL"
   }
 ]
