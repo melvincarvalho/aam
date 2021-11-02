@@ -68,9 +68,6 @@ Search via nick for the JSON in the agent [registry](registry.json)
 aam search <nick>
 ```
 
+## ⚖️ License
 
-
-## License
-
-MIT
-
+This project is under the MIT License. See the [LICENSE](https://github.com/melvincarvalho/aam/blob/gh-pages/LICENSE) file for the full license text.
