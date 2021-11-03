@@ -15,20 +15,21 @@ A library and framework to create composable autonomous agents
 ---
   
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/melvincarvalho/aam/blob/gh-pages/LICENSE)
-![npm](https://img.shields.io/npm/v/aam)
-[![npm](https://img.shields.io/npm/dw/rww.svg)](https://npmjs.com/package/rww)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![npm](https://img.shields.io/npm/v/aam)](https://npmjs.com/package/aam)
+[![npm](https://img.shields.io/npm/dw/aam.svg)](https://npmjs.com/package/aam)
+[![Github Stars](https://img.shields.io/github/stars/melvincarvalho/aam.svg)](https://github.com/melvincarvalho/aam/)
 
+## 💌 Features
 
-## Features
+&nbsp;&nbsp;✓&nbsp; Create autonomous agents  
+&nbsp;&nbsp;✓&nbsp; Composable Skills  
+&nbsp;&nbsp;✓&nbsp; Agent Registry  
+&nbsp;&nbsp;✓&nbsp; Skills Registry  
+&nbsp;&nbsp;✓&nbsp; Search agents and skills  
 
-&nbsp;&nbsp;✓&nbsp; Create autonomous agents<br>
-&nbsp;&nbsp;✓&nbsp; Composable Skills<br>
-&nbsp;&nbsp;✓&nbsp; Agent Registry<br>
-&nbsp;&nbsp;✓&nbsp; Skills Registry<br>
-&nbsp;&nbsp;✓&nbsp; Search agents and skills<br>
+## 📜 Getting Started
 
-## Getting Started
 ### Install with npm
 
 ```
@@ -53,7 +54,7 @@ aam install <agent>
 
 ### Skills
 
-Search for composable [skills](https://github.com/topics/aam-skill), from the skill [registry](skills.json)
+Instructions to install composable [skills](https://github.com/topics/aam-skill), from the skill [registry](skills.json)
 
 ```
 aam skill <skill>
@@ -67,9 +68,6 @@ Search via nick for the JSON in the agent [registry](registry.json)
 aam search <nick>
 ```
 
+## ⚖️ License
 
-
-## License
-
-MIT
-
+This project is under the MIT License. See the [LICENSE](https://github.com/melvincarvalho/aam/blob/gh-pages/LICENSE) file for the full license text.
