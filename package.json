@@ -1,6 +1,6 @@
 {
   "name": "aam",
-  "version": "0.0.29",
+  "version": "0.0.30",
   "description": "autonomous agent manager",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/melvincarvalho/aam#readme",
   "dependencies": {
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "tape": "^5.3.1"
   }
 }
