@@ -20,7 +20,7 @@ A library and framework to create composable autonomous agents
 [![npm](https://img.shields.io/npm/dw/aam.svg)](https://npmjs.com/package/aam)
 [![Github Stars](https://img.shields.io/github/stars/melvincarvalho/aam.svg)](https://github.com/melvincarvalho/aam/)
 
-## 💖 Features
+## ⚡️ Features
 
 &nbsp;&nbsp;✓&nbsp; Create autonomous agents  
 &nbsp;&nbsp;✓&nbsp; Composable Skills  
