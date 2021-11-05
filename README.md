@@ -30,11 +30,15 @@ A library and framework to create composable autonomous agents
 
 ## ✍️ Getting Started
 
+---
+
 ### Install with npm
 
 ```
 sudo npm -g install aam
 ```
+
+---
 
 ### Create an agent
 
@@ -44,6 +48,8 @@ Display instructions to create an agent with a given name
 aam create <name>
 ```
 
+---
+
 ### Install an agent
 
 Instructions to install an agent, from the agent [registry](registry.json)
@@ -51,6 +57,8 @@ Instructions to install an agent, from the agent [registry](registry.json)
 ```
 aam install <agent>
 ```
+
+---
 
 ### Skills
 
@@ -60,6 +68,8 @@ Instructions to install composable [skills](https://github.com/topics/aam-skill)
 aam skill <skill>
 ```
 
+---
+
 ### Search
 
 Search via nick for the JSON in the agent [registry](registry.json)
@@ -67,6 +77,8 @@ Search via nick for the JSON in the agent [registry](registry.json)
 ```
 aam search <nick>
 ```
+
+---
 
 ## ⚖️ License
 
