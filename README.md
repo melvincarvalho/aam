@@ -28,7 +28,7 @@ A library and framework to create composable autonomous agents
 &nbsp;&nbsp;✓&nbsp; Skills Registry  
 &nbsp;&nbsp;✓&nbsp; Search agents and skills  
 
-## 📜 Getting Started
+## ✍️ Getting Started
 
 ### Install with npm
 
