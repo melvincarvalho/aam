@@ -54,3 +54,9 @@ it contains one field `privkey`
 This contains the secret exponent of the private key of the genesis txo
 
 It is used to move forward each gitmark
+
+The nesting of the repo dir by default follows the 3 directories in the git tree by default
+ie
+- project
+- user
+- provider (e.g. github.com)
