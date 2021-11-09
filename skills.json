@@ -52,5 +52,12 @@
     "package": "./package.json",
     "repository": "https://github.com/melvincarvalho/skill-data.git",
     "install": "https://raw.githubusercontent.com/melvincarvalho/skill-data/gh-pages/INSTALL"
+  },
+  {
+    "@id": "gitmark:327a53b65c9dc20830a7c807d353fb5d1009fdc1a0eda412e5b997a1d753432f:0",
+    "genesis": "gitmark:327a53b65c9dc20830a7c807d353fb5d1009fdc1a0eda412e5b997a1d753432f:0",
+    "nick": "skill-dyndns",
+    "package": "./package.json",
+    "repository": "https://github.com/melvincarvalho/skill-dyndns.git"
   }
 ]
