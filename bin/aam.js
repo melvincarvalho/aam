@@ -70,11 +70,20 @@ const command = argv._[0];
 
 switch (command) {
   case 'init':
+    console.log('Initializing AAM project in current directory...');
     const initResult = initialize();
     if (initResult.success) {
       console.log('Successfully initialized AAM project with A2A templates and directories');
+      console.log('Created:');
+      console.log('  - templates/agent-card.json');
+      console.log('  - templates/agent-skill.json');
+      console.log('  - registry/agents.json');
+      console.log('  - registry/skills.json');
     } else {
       console.error('Error initializing project:', initResult.error);
+      console.error('TIP: If you are experiencing permission errors, try:');
+      console.error('1. Running the command in a directory where you have write permissions');
+      console.error('2. Using a non-root user for npm operations');
     }
     break;
 
@@ -95,6 +104,7 @@ switch (command) {
       console.log(JSON.stringify(createResult.agentCard, null, 2));
     } else {
       console.error('Error creating agent card:', createResult.error);
+      console.error('TIP: Make sure you have run `aam init` in this directory first');
     }
     break;
 
@@ -108,11 +118,19 @@ switch (command) {
       process.exit(1);
     }
 
-    const agentCardPath = argv.card || '.well-known/agent.json';
+    const agentCardPath = argv.card || path.join(process.cwd(), '.well-known/agent.json');
+
+    // Verify the agent card exists
+    if (!fs.existsSync(agentCardPath)) {
+      console.error(`Error: Agent card not found at ${agentCardPath}`);
+      console.error('TIP: Make sure you have created an agent card using `aam create-agent` first');
+      process.exit(1);
+    }
+
     const addResult = addSkill(skill, agentCardPath);
 
     if (addResult.success) {
-      console.log(`Successfully added skill "${skill.id}" to agent card`);
+      console.log(`Successfully added skill "${skill.id}" to agent card at ${agentCardPath}`);
     } else {
       console.error('Error adding skill:', addResult.error);
     }
@@ -127,12 +145,28 @@ switch (command) {
       process.exit(1);
     }
 
-    const importCardPath = argv.card || '.well-known/agent.json';
-    const importRegistryPath = argv.registry;
+    const importCardPath = argv.card || path.join(process.cwd(), '.well-known/agent.json');
+
+    // Verify the agent card exists
+    if (!fs.existsSync(importCardPath)) {
+      console.error(`Error: Agent card not found at ${importCardPath}`);
+      console.error('TIP: Make sure you have created an agent card using `aam create-agent` first');
+      process.exit(1);
+    }
+
+    let importRegistryPath = null;
+    if (argv.registry) {
+      importRegistryPath = path.resolve(argv.registry);
+      if (!fs.existsSync(importRegistryPath)) {
+        console.error(`Error: Skills registry not found at ${importRegistryPath}`);
+        process.exit(1);
+      }
+    }
+
     const importResult = importSkill(skillId, importCardPath, importRegistryPath);
 
     if (importResult.success) {
-      console.log(`Successfully imported skill "${skillId}" to agent card`);
+      console.log(`Successfully imported skill "${skillId}" to agent card at ${importCardPath}`);
     } else {
       console.error('Error importing skill:', importResult.error);
     }
@@ -147,17 +181,29 @@ switch (command) {
       process.exit(1);
     }
 
-    const agentSearchRegistryPath = argv.registry;
+    let agentSearchRegistryPath = null;
+    if (argv.registry) {
+      agentSearchRegistryPath = path.resolve(argv.registry);
+      if (!fs.existsSync(agentSearchRegistryPath)) {
+        console.error(`Error: Agents registry not found at ${agentSearchRegistryPath}`);
+        process.exit(1);
+      }
+    }
+
     const agentSearchResult = searchAgents(agentQuery, agentSearchRegistryPath);
 
     if (agentSearchResult.success) {
       console.log(`Found ${agentSearchResult.results.length} agents matching "${agentQuery}":`);
-      agentSearchResult.results.forEach(agent => {
-        console.log(`\n- ${agent.name}`);
-        console.log(`  ${agent.description}`);
-        console.log(`  URL: ${agent.url}`);
-        console.log(`  Skills: ${agent.skills ? agent.skills.length : 0}`);
-      });
+      if (agentSearchResult.results.length === 0) {
+        console.log('No results found.');
+      } else {
+        agentSearchResult.results.forEach(agent => {
+          console.log(`\n- ${agent.name}`);
+          console.log(`  ${agent.description}`);
+          console.log(`  URL: ${agent.url}`);
+          console.log(`  Skills: ${agent.skills ? agent.skills.length : 0}`);
+        });
+      }
     } else {
       console.error('Error searching agents:', agentSearchResult.error);
     }
@@ -172,29 +218,55 @@ switch (command) {
       process.exit(1);
     }
 
-    const skillSearchRegistryPath = argv.registry;
+    let skillSearchRegistryPath = null;
+    if (argv.registry) {
+      skillSearchRegistryPath = path.resolve(argv.registry);
+      if (!fs.existsSync(skillSearchRegistryPath)) {
+        console.error(`Error: Skills registry not found at ${skillSearchRegistryPath}`);
+        process.exit(1);
+      }
+    }
+
     const skillSearchResult = searchSkills(skillQuery, skillSearchRegistryPath);
 
     if (skillSearchResult.success) {
       console.log(`Found ${skillSearchResult.results.length} skills matching "${skillQuery}":`);
-      skillSearchResult.results.forEach(skill => {
-        console.log(`\n- ${skill.name} (${skill.id})`);
-        console.log(`  ${skill.description}`);
-        console.log(`  Input Modes: ${skill.inputModes ? skill.inputModes.join(', ') : 'N/A'}`);
-        console.log(`  Output Modes: ${skill.outputModes ? skill.outputModes.join(', ') : 'N/A'}`);
-      });
+      if (skillSearchResult.results.length === 0) {
+        console.log('No results found.');
+      } else {
+        skillSearchResult.results.forEach(skill => {
+          console.log(`\n- ${skill.name} (${skill.id})`);
+          console.log(`  ${skill.description}`);
+          console.log(`  Input Modes: ${skill.inputModes ? skill.inputModes.join(', ') : 'N/A'}`);
+          console.log(`  Output Modes: ${skill.outputModes ? skill.outputModes.join(', ') : 'N/A'}`);
+        });
+      }
     } else {
       console.error('Error searching skills:', skillSearchResult.error);
     }
     break;
 
   case 'register-agent':
-    const registerCardPath = argv.card || '.well-known/agent.json';
-    const registerRegistryPath = argv.registry;
+    const registerCardPath = argv.card || path.join(process.cwd(), '.well-known/agent.json');
+
+    // Verify the agent card exists
+    if (!fs.existsSync(registerCardPath)) {
+      console.error(`Error: Agent card not found at ${registerCardPath}`);
+      console.error('TIP: Make sure you have created an agent card using `aam create-agent` first');
+      process.exit(1);
+    }
+
+    let registerRegistryPath = null;
+    if (argv.registry) {
+      registerRegistryPath = path.resolve(argv.registry);
+    } else {
+      registerRegistryPath = path.join(process.cwd(), 'registry/agents.json');
+    }
+
     const registerResult = registerAgent(registerCardPath, registerRegistryPath);
 
     if (registerResult.success) {
-      console.log('Successfully registered agent in registry');
+      console.log(`Successfully registered agent from ${registerCardPath} in registry at ${registerRegistryPath}`);
     } else {
       console.error('Error registering agent:', registerResult.error);
     }
