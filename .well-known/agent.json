@@ -1,7 +1,7 @@
 {
-  "name": "Example Agent",
-  "description": "An example agent created with AAM",
-  "url": "https://example.com/a2a",
+  "name": "Test ES Module Agent",
+  "description": "An agent created to test ES modules",
+  "url": "https://example.com/test-esm",
   "version": "1.0.0",
   "provider": {
     "name": "Example Provider",

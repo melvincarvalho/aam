@@ -38,10 +38,44 @@ Learn more about the A2A protocol at [Google's A2A Protocol Documentation](https
 
 ---
 
+### Requirements
+
+- Node.js >= 14.16.0 (required for ES Modules support)
+
 ### Install with npm
 
 ```
 npm install -g aam
+```
+
+---
+
+### Using as an ES Module
+
+AAM is implemented as an ES Module, which means you can import its functions directly in your JavaScript files:
+
+```javascript
+import { createAgentCard, initialize, addSkill } from 'aam/lib/index.js'
+
+// Initialize a new project
+const init = initialize()
+
+// Create an agent card
+const agent = createAgentCard({
+  name: 'My Agent',
+  description: 'A custom A2A agent',
+  url: 'https://example.com/a2a'
+})
+
+// Add a skill
+const skill = {
+  id: 'custom-skill',
+  name: 'Custom Skill',
+  description: 'A custom skill',
+  inputModes: ['text'],
+  outputModes: ['text']
+}
+addSkill(skill)
 ```
 
 ---

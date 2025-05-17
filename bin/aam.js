@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
 // IMPORTS
-const fs = require('fs');
-const path = require('path');
-const argv = require('minimist')(process.argv.slice(2));
-const {
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import minimist from 'minimist';
+import {
   createAgentCard,
   initialize,
   addSkill,
@@ -12,7 +13,14 @@ const {
   searchSkills,
   importSkill,
   registerAgent
-} = require('../lib/');
+} from '../lib/index.js';
+
+// Get current directory in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Parse arguments
+const argv = minimist(process.argv.slice(2));
 
 // Function to display help information
 function displayHelp () {

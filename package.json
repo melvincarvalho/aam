@@ -1,8 +1,9 @@
 {
   "name": "aam",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Agent-to-Agent Manager for A2A protocol",
   "main": "lib/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -31,5 +32,8 @@
   },
   "devDependencies": {
     "tape": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=14.16.0"
   }
 }
