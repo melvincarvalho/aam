@@ -26,7 +26,8 @@ A tool for creating and managing agents conforming to the Agent-to-Agent (A2A) p
 &nbsp;&nbsp;✓&nbsp; Search for agents in registries  
 &nbsp;&nbsp;✓&nbsp; Search for skills in registries  
 &nbsp;&nbsp;✓&nbsp; Import skills from registries to agent cards  
-&nbsp;&nbsp;✓&nbsp; Register agents in curated registries
+&nbsp;&nbsp;✓&nbsp; Register agents in curated registries  
+&nbsp;&nbsp;✓&nbsp; Interactive wizard interface with colorful UI
 
 ## 📖 About A2A Protocol
 
@@ -77,6 +78,25 @@ const skill = {
 }
 addSkill(skill)
 ```
+
+---
+
+### Interactive Wizard
+
+AAM includes an interactive wizard-style interface to guide you through the process of creating and managing agents with a colorful and user-friendly CLI:
+
+```
+aam wizard
+```
+
+The wizard provides a step-by-step interface for:
+
+- Creating and managing agent cards
+- Adding and importing skills
+- Searching the registry for agents and skills
+- Registering your agent to the registry
+
+This is the recommended approach for new users or when you prefer an interactive experience over command-line arguments.
 
 ---
 
@@ -187,6 +207,17 @@ Display help information about all commands:
 ```
 aam help
 ```
+
+The supported commands are:
+
+- `init`: Initialize the project with necessary templates and directories
+- `wizard`: Start the interactive wizard with colorful UI
+- `create-agent`: Create an agent card in `.well-known/agent.json`
+- `add-skill`: Add a skill to an agent card
+- `import-skill`: Import a skill from registry to agent card
+- `search-agents`: Search for agents in the registry
+- `search-skills`: Search for skills in the registry
+- `register-agent`: Register an agent in the registry
 
 ---
 

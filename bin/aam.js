@@ -14,6 +14,7 @@ import {
   importSkill,
   registerAgent
 } from '../lib/index.js';
+import { startWizard } from '../lib/wizard.js';
 
 // Get current directory in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -37,10 +38,12 @@ Commands:
   search-agents <query>     Search for agents in the registry
   search-skills <query>     Search for skills in the registry
   register-agent            Register an agent in the registry
+  wizard                    Start interactive wizard with guided UI
   help                      Display this help information
 
 Examples:
   aam init
+  aam wizard
   aam create-agent --name "My Agent" --description "A custom A2A agent" --url "https://example.com/a2a"
   aam add-skill --id "custom-skill" --name "Custom Skill" --description "A custom skill"
   aam import-skill text-generation
@@ -77,6 +80,11 @@ function parseSkillFromArgs (args) {
 const command = argv._[0];
 
 switch (command) {
+  case 'wizard':
+    // Start the interactive wizard
+    startWizard();
+    break;
+
   case 'init':
     console.log('Initializing AAM project in current directory...');
     const initResult = initialize();
