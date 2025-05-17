@@ -1,0 +1,23 @@
+{
+  "name": "Example Agent",
+  "description": "An example agent created with AAM",
+  "url": "https://example.com/a2a",
+  "version": "1.0.0",
+  "provider": {
+    "name": "Example Provider",
+    "url": "https://example.com"
+  },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false
+  },
+  "authentication": {
+    "schemes": [
+      {
+        "type": "Bearer",
+        "description": "JWT token authentication"
+      }
+    ]
+  },
+  "skills": []
+}

@@ -1,8 +1,8 @@
 {
   "name": "aam",
-  "version": "0.0.32",
-  "description": "autonomous agent manager",
-  "main": "index.js",
+  "version": "0.0.33",
+  "description": "Agent-to-Agent Manager for A2A protocol",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +10,11 @@
     "aam": "bin/aam.js"
   },
   "keywords": [
-    "aam"
+    "aam",
+    "a2a",
+    "agent",
+    "agent-to-agent",
+    "agent-discovery"
   ],
   "repository": {
     "type": "git",
@@ -23,7 +27,9 @@
   },
   "homepage": "https://github.com/melvincarvalho/aam#readme",
   "dependencies": {
-    "minimist": "^1.2.5",
-    "tape": "^5.3.1"
+    "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "tape": "^5.6.3"
   }
 }

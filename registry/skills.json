@@ -1,0 +1,152 @@
+[
+  {
+    "id": "text-generation",
+    "name": "Text Generation",
+    "description": "Generate text content based on prompts",
+    "inputModes": [
+      "text"
+    ],
+    "outputModes": [
+      "text"
+    ],
+    "examples": [
+      {
+        "input": {
+          "text": "Write a short poem about the moon"
+        },
+        "output": {
+          "text": "Silver orb in night's embrace,\nCasting light on Earth's dark face.\nAncient witness, timeless grace,\nGuiding dreamers through space."
+        }
+      }
+    ]
+  },
+  {
+    "id": "image-description",
+    "name": "Image Description",
+    "description": "Generate descriptive text for an image",
+    "inputModes": [
+      "image"
+    ],
+    "outputModes": [
+      "text"
+    ],
+    "examples": [
+      {
+        "input": {
+          "image": "https://example.com/sample-image.jpg"
+        },
+        "output": {
+          "text": "A sunset over a mountain range with orange and purple hues in the sky."
+        }
+      }
+    ]
+  },
+  {
+    "id": "object-detection",
+    "name": "Object Detection",
+    "description": "Detect and identify objects in an image",
+    "inputModes": [
+      "image"
+    ],
+    "outputModes": [
+      "text",
+      "json"
+    ],
+    "examples": [
+      {
+        "input": {
+          "image": "https://example.com/sample-scene.jpg"
+        },
+        "output": {
+          "json": {
+            "objects": [
+              {
+                "type": "car",
+                "confidence": 0.98,
+                "boundingBox": [
+                  10,
+                  15,
+                  200,
+                  150
+                ]
+              },
+              {
+                "type": "person",
+                "confidence": 0.95,
+                "boundingBox": [
+                  300,
+                  50,
+                  100,
+                  200
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "id": "language-translation",
+    "name": "Language Translation",
+    "description": "Translate text between languages",
+    "inputModes": [
+      "text"
+    ],
+    "outputModes": [
+      "text"
+    ],
+    "parameters": {
+      "targetLanguage": {
+        "type": "string",
+        "required": true,
+        "description": "The language code to translate to"
+      }
+    },
+    "examples": [
+      {
+        "input": {
+          "text": "Hello, world!",
+          "parameters": {
+            "targetLanguage": "fr"
+          }
+        },
+        "output": {
+          "text": "Bonjour, monde!"
+        }
+      }
+    ]
+  },
+  {
+    "id": "code-generation",
+    "name": "Code Generation",
+    "description": "Generate code based on requirements",
+    "inputModes": [
+      "text"
+    ],
+    "outputModes": [
+      "text",
+      "code"
+    ],
+    "parameters": {
+      "language": {
+        "type": "string",
+        "required": true,
+        "description": "Programming language to generate"
+      }
+    },
+    "examples": [
+      {
+        "input": {
+          "text": "Create a function to calculate the Fibonacci sequence",
+          "parameters": {
+            "language": "python"
+          }
+        },
+        "output": {
+          "code": "def fibonacci(n):\n    if n <= 0:\n        return []\n    elif n == 1:\n        return [0]\n    elif n == 2:\n        return [0, 1]\n    else:\n        fib = [0, 1]\n        for i in range(2, n):\n            fib.append(fib[i-1] + fib[i-2])\n        return fib"
+        }
+      }
+    ]
+  }
+]

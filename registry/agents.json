@@ -1,0 +1,139 @@
+[
+  {
+    "name": "Text Generation Agent",
+    "description": "An agent that can generate text content using AI",
+    "url": "https://example.com/agents/text-generation",
+    "version": "1.0.0",
+    "provider": {
+      "name": "Example AI",
+      "url": "https://example.ai"
+    },
+    "capabilities": {
+      "streaming": true,
+      "pushNotifications": false,
+      "multiTurn": true
+    },
+    "authentication": {
+      "schemes": [
+        {
+          "type": "Bearer",
+          "description": "JWT token authentication"
+        }
+      ]
+    },
+    "skills": [
+      {
+        "id": "text-generation",
+        "name": "Text Generation",
+        "description": "Generate text content based on prompts",
+        "inputModes": [
+          "text"
+        ],
+        "outputModes": [
+          "text"
+        ],
+        "examples": [
+          {
+            "input": {
+              "text": "Write a short poem about the moon"
+            },
+            "output": {
+              "text": "Silver orb in night's embrace,\nCasting light on Earth's dark face.\nAncient witness, timeless grace,\nGuiding dreamers through space."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Image Analysis Agent",
+    "description": "An agent that can analyze and describe images",
+    "url": "https://example.com/agents/image-analysis",
+    "version": "1.0.0",
+    "provider": {
+      "name": "Example Vision",
+      "url": "https://example.vision"
+    },
+    "capabilities": {
+      "streaming": false,
+      "pushNotifications": false,
+      "multiTurn": true
+    },
+    "authentication": {
+      "schemes": [
+        {
+          "type": "API-Key",
+          "description": "API key authentication"
+        }
+      ]
+    },
+    "skills": [
+      {
+        "id": "image-description",
+        "name": "Image Description",
+        "description": "Generate descriptive text for an image",
+        "inputModes": [
+          "image"
+        ],
+        "outputModes": [
+          "text"
+        ],
+        "examples": [
+          {
+            "input": {
+              "image": "https://example.com/sample-image.jpg"
+            },
+            "output": {
+              "text": "A sunset over a mountain range with orange and purple hues in the sky."
+            }
+          }
+        ]
+      },
+      {
+        "id": "object-detection",
+        "name": "Object Detection",
+        "description": "Detect and identify objects in an image",
+        "inputModes": [
+          "image"
+        ],
+        "outputModes": [
+          "text",
+          "json"
+        ],
+        "examples": [
+          {
+            "input": {
+              "image": "https://example.com/sample-scene.jpg"
+            },
+            "output": {
+              "json": {
+                "objects": [
+                  {
+                    "type": "car",
+                    "confidence": 0.98,
+                    "boundingBox": [
+                      10,
+                      15,
+                      200,
+                      150
+                    ]
+                  },
+                  {
+                    "type": "person",
+                    "confidence": 0.95,
+                    "boundingBox": [
+                      300,
+                      50,
+                      100,
+                      200
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

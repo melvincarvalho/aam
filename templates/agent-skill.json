@@ -1,0 +1,21 @@
+{
+  "id": "example-skill",
+  "name": "Example Skill",
+  "description": "An example skill for demonstration",
+  "inputModes": [
+    "text"
+  ],
+  "outputModes": [
+    "text"
+  ],
+  "examples": [
+    {
+      "input": {
+        "text": "Example input"
+      },
+      "output": {
+        "text": "Example output"
+      }
+    }
+  ]
+}

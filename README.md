@@ -1,9 +1,9 @@
 <div align="center">
-  <h1>Autonomous Agent Manager</h1>
+  <h1>Agent-to-Agent Manager (AAM)</h1>
 </div>
 
 <div align="center">  
-A library and framework to create composable autonomous agents
+A tool for creating and managing agents conforming to the Agent-to-Agent (A2A) protocol
 </div>
 
 ---
@@ -13,7 +13,6 @@ A library and framework to create composable autonomous agents
 </div>
   
 ---
-  
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![npm](https://img.shields.io/npm/v/aam)](https://npmjs.com/package/aam)
@@ -22,11 +21,18 @@ A library and framework to create composable autonomous agents
 
 ## ⚡️ Features
 
-&nbsp;&nbsp;✓&nbsp; Create autonomous agents  
-&nbsp;&nbsp;✓&nbsp; Composable Skills  
-&nbsp;&nbsp;✓&nbsp; Agent Registry  
-&nbsp;&nbsp;✓&nbsp; Skills Registry  
-&nbsp;&nbsp;✓&nbsp; Search agents and skills  
+&nbsp;&nbsp;✓&nbsp; Create A2A-compliant agent cards in `.well-known/agent.json`  
+&nbsp;&nbsp;✓&nbsp; Manage agent skills according to A2A protocol  
+&nbsp;&nbsp;✓&nbsp; Search for agents in registries  
+&nbsp;&nbsp;✓&nbsp; Search for skills in registries  
+&nbsp;&nbsp;✓&nbsp; Import skills from registries to agent cards  
+&nbsp;&nbsp;✓&nbsp; Register agents in curated registries
+
+## 📖 About A2A Protocol
+
+The Agent-to-Agent (A2A) protocol is designed to enable AI agents to discover and collaborate with each other. The protocol standardizes how agents describe themselves and their capabilities through "Agent Cards" which are hosted at a well-known location (typically `.well-known/agent.json`).
+
+Learn more about the A2A protocol at [Google's A2A Protocol Documentation](https://google.github.io/A2A/topics/agent-discovery/).
 
 ## ✍️ Getting Started
 
@@ -35,50 +41,209 @@ A library and framework to create composable autonomous agents
 ### Install with npm
 
 ```
-sudo npm -g install aam
+npm install -g aam
 ```
 
 ---
 
-### Create an agent
+### Initialize the project
 
-Display instructions to create an agent with a given name
-
-```
-aam create <name>
-```
-
----
-
-### Install an agent
-
-Instructions to install an agent, from the agent [registry](registry.json)
+Create the necessary templates and directories:
 
 ```
-aam install <agent>
+aam init
 ```
 
 ---
 
-### Skills
+### Create an agent card
 
-Instructions to install composable [skills](https://github.com/topics/aam-skill), from the skill [registry](skills.json)
+Create an A2A-compliant agent card in `.well-known/agent.json`:
 
 ```
-aam skill <skill>
+aam create-agent --name "My Agent" --description "A custom A2A agent" --url "https://example.com/a2a"
+```
+
+Optional parameters:
+
+- `--provider-name`: Name of the agent provider
+- `--provider-url`: URL of the agent provider
+- `--version`: Version of the agent
+
+---
+
+### Add a skill to an agent
+
+Add a custom skill to your agent card:
+
+```
+aam add-skill --id "custom-skill" --name "Custom Skill" --description "A custom skill" --input-modes "text" --output-modes "text"
+```
+
+Optional parameters:
+
+- `--example-input`: Example input for the skill
+- `--example-output`: Example output for the skill
+- `--card`: Path to the agent card (default: `.well-known/agent.json`)
+
+---
+
+### Import a skill from registry
+
+Import a skill from the registry to your agent card:
+
+```
+aam import-skill text-generation
+```
+
+Optional parameters:
+
+- `--card`: Path to the agent card (default: `.well-known/agent.json`)
+- `--registry`: Path to the skills registry (default: built-in registry)
+
+---
+
+### Search for agents in registry
+
+Search for agents in the registry:
+
+```
+aam search-agents chatbot
+```
+
+Optional parameters:
+
+- `--registry`: Path to the agents registry (default: built-in registry)
+
+---
+
+### Search for skills in registry
+
+Search for skills in the registry:
+
+```
+aam search-skills image
+```
+
+Optional parameters:
+
+- `--registry`: Path to the skills registry (default: built-in registry)
+
+---
+
+### Register an agent in registry
+
+Register your agent in the registry:
+
+```
+aam register-agent
+```
+
+Optional parameters:
+
+- `--card`: Path to the agent card (default: `.well-known/agent.json`)
+- `--registry`: Path to the agents registry (default: built-in registry)
+
+---
+
+### Display help information
+
+Display help information about all commands:
+
+```
+aam help
 ```
 
 ---
 
-### Search
+## 🔍 Agent Discovery
 
-Search via nick for the JSON in the agent [registry](registry.json)
+The A2A protocol provides several strategies for discovering agents:
 
+1. **Well-Known URI**: Agents host their card at `.well-known/agent.json` following RFC 8615.
+2. **Curated Registries**: Agents can be registered in and discovered via centralized registries.
+3. **Direct Configuration**: Agents can be configured with direct knowledge of each other.
+
+AAM supports all these discovery methods and makes it easy to generate compliant agent cards.
+
+## 📝 Example Agent Card
+
+Here's an example of an agent card in A2A protocol format:
+
+```json
+{
+  "name": "Text Generation Agent",
+  "description": "An agent that can generate text content using AI",
+  "url": "https://example.com/agents/text-generation",
+  "version": "1.0.0",
+  "provider": {
+    "name": "Example AI",
+    "url": "https://example.ai"
+  },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "multiTurn": true
+  },
+  "authentication": {
+    "schemes": [
+      {
+        "type": "Bearer",
+        "description": "JWT token authentication"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "id": "text-generation",
+      "name": "Text Generation",
+      "description": "Generate text content based on prompts",
+      "inputModes": ["text"],
+      "outputModes": ["text"],
+      "examples": [
+        {
+          "input": { "text": "Write a short poem about the moon" },
+          "output": {
+            "text": "Silver orb in night's embrace,\nCasting light on Earth's dark face.\nAncient witness, timeless grace,\nGuiding dreamers through space."
+          }
+        }
+      ]
+    }
+  ]
+}
 ```
-aam search <nick>
-```
 
----
+## 📝 Example Skill Format
+
+Here's an example of a skill in A2A protocol format:
+
+```json
+{
+  "id": "language-translation",
+  "name": "Language Translation",
+  "description": "Translate text between languages",
+  "inputModes": ["text"],
+  "outputModes": ["text"],
+  "parameters": {
+    "targetLanguage": {
+      "type": "string",
+      "required": true,
+      "description": "The language code to translate to"
+    }
+  },
+  "examples": [
+    {
+      "input": {
+        "text": "Hello, world!",
+        "parameters": {
+          "targetLanguage": "fr"
+        }
+      },
+      "output": { "text": "Bonjour, monde!" }
+    }
+  ]
+}
+```
 
 ## ⚖️ License
 
