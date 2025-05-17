@@ -20,5 +20,48 @@
       }
     ]
   },
-  "skills": []
+  "skills": [
+    {
+      "id": "echo",
+      "name": "Echo",
+      "description": "Returns the input text back to the sender",
+      "inputModes": [
+        "text"
+      ],
+      "outputModes": [
+        "text"
+      ],
+      "examples": [
+        {
+          "input": {
+            "text": "Hello, agent!"
+          },
+          "output": {
+            "text": "Hello, agent!"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ping",
+      "name": "Ping",
+      "description": "Responds to a ping request with a status message",
+      "inputModes": [
+        "text"
+      ],
+      "outputModes": [
+        "text"
+      ],
+      "examples": [
+        {
+          "input": {
+            "text": "ping"
+          },
+          "output": {
+            "text": "pong! Agent is online and responding."
+          }
+        }
+      ]
+    }
+  ]
 }
