@@ -632,8 +632,8 @@
       <p>Create, discover, and compose Agentic Apps and skills. The registry that's doing for AI agents what npm did for JavaScript.</p>
 
       <div class="hero-buttons">
-        <a href="#browse" class="btn btn-primary" onclick="switchTab('agents')">Explore Agents</a>
-        <a href="#browse" class="btn btn-secondary" onclick="switchTab('skills')">Browse Skills</a>
+        <a href="#agents" class="btn btn-primary">Explore Agents</a>
+        <a href="#skills" class="btn btn-secondary">Browse Skills</a>
         <a href="https://github.com/melvincarvalho/aam" class="btn btn-link">
           GitHub Repository
           <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
@@ -714,26 +714,43 @@
     </div>
   </section>
 
-  <!-- Browse Section -->
-  <section class="browse-section" id="browse">
+  <!-- Skills Section -->
+  <section class="browse-section" id="skills">
     <div class="container">
       <div class="section-header">
-        <h2>Discover the Registry</h2>
-        <p>Browse available skills and agents, or search for what you need</p>
+        <h2>Skills Registry</h2>
+        <p>Reusable capabilities for AI agents. Install with <code>aam skills &lt;repo&gt;</code></p>
       </div>
 
       <div class="search-row">
-        <input type="text" class="search-input" id="search" placeholder="Search skills and agents...">
-        <div class="tabs">
-          <button class="tab active" data-tab="skills">Skills <span class="count" id="skills-tab-count">0</span></button>
-          <button class="tab" data-tab="agents">Agents <span class="count" id="agents-tab-count">0</span></button>
-        </div>
+        <input type="text" class="search-input" id="skills-search" placeholder="Search skills...">
       </div>
 
-      <div id="content" class="grid">
+      <div id="skills-content" class="grid">
         <div class="loading">
           <div class="spinner"></div>
-          Loading registry...
+          Loading skills...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agents Section -->
+  <section class="browse-section" id="agents">
+    <div class="container">
+      <div class="section-header">
+        <h2>Agents Registry</h2>
+        <p>Custom Claude Code subagents. Install with <code>aam agents &lt;repo&gt;</code></p>
+      </div>
+
+      <div class="search-row">
+        <input type="text" class="search-input" id="agents-search" placeholder="Search agents...">
+      </div>
+
+      <div id="agents-content" class="grid">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading agents...
         </div>
       </div>
     </div>
@@ -753,7 +770,6 @@
 
     let skills = [];
     let agents = [];
-    let currentTab = 'skills';
 
     async function loadData() {
       try {
@@ -767,12 +783,11 @@
 
         document.getElementById('skills-count').textContent = skills.length;
         document.getElementById('agents-count').textContent = agents.length;
-        document.getElementById('skills-tab-count').textContent = skills.length;
-        document.getElementById('agents-tab-count').textContent = agents.length;
 
-        renderItems();
+        renderSkills();
+        renderAgents();
       } catch (err) {
-        document.getElementById('content').innerHTML = `
+        document.getElementById('skills-content').innerHTML = `
           <div class="empty">
             <p>Failed to load registry. Please try again later.</p>
           </div>
@@ -780,73 +795,78 @@
       }
     }
 
-    function renderItems() {
-      const search = document.getElementById('search').value.toLowerCase();
-      const items = currentTab === 'skills' ? skills : agents;
+    function renderCard(item, type) {
+      const name = item.nick || item.name || 'Unknown';
+      const desc = item.description || (type === 'agents' ? 'A custom Claude Code agent' : 'A composable skill for AI agents');
+      const repo = item.repository || '';
+      const repoShort = repo.replace('https://github.com/', '').replace('.git', '');
+      const category = item.category || '';
+      const source = item.source || '';
+      const tools = item.tools || '';
+      const model = item.model || '';
+      const installCmd = type === 'agents' ? 'aam agents' : 'aam skills';
 
-      const filtered = items.filter(item => {
-        const text = [
-          item.nick || item.name || '',
-          item.description || '',
-          item.repository || ''
-        ].join(' ').toLowerCase();
+      return `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">${escapeHtml(name)}</div>
+            <div class="card-badges">
+              ${category ? `<div class="card-badge category">${escapeHtml(category)}</div>` : ''}
+              ${source ? `<div class="card-badge source-${source}">${source}</div>` : ''}
+              ${model ? `<div class="card-badge model">${model}</div>` : ''}
+            </div>
+          </div>
+          <div class="card-description">${escapeHtml(desc)}</div>
+          ${tools ? `<div class="card-tools"><strong>Tools:</strong> ${escapeHtml(tools)}</div>` : ''}
+          <div class="card-meta">
+            ${item.stars ? `<span class="card-stars">
+              <svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+              ${formatStars(item.stars)}
+            </span>` : ''}
+            ${repo ? `<a href="${escapeHtml(repo)}" target="_blank">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              ${escapeHtml(repoShort)}
+            </a>` : ''}
+          </div>
+          ${repoShort ? `
+          <div class="card-install">
+            <code>${installCmd} ${escapeHtml(repoShort)}</code>
+          </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderSkills() {
+      const search = document.getElementById('skills-search').value.toLowerCase();
+      const filtered = skills.filter(item => {
+        const text = [item.nick || item.name || '', item.description || '', item.repository || ''].join(' ').toLowerCase();
         return text.includes(search);
       });
 
       if (filtered.length === 0) {
-        document.getElementById('content').innerHTML = `
-          <div class="empty">
-            <p>No ${currentTab} found${search ? ` matching "${search}"` : ''}</p>
-          </div>
-        `;
+        document.getElementById('skills-content').innerHTML = `<div class="empty"><p>No skills found${search ? ` matching "${search}"` : ''}</p></div>`;
         return;
       }
 
-      const html = filtered.map(item => {
-        const name = item.nick || item.name || 'Unknown';
-        const desc = item.description || (currentTab === 'agents' ? 'A custom Claude Code agent' : 'A composable skill for AI agents');
-        const repo = item.repository || '';
-        const repoShort = repo.replace('https://github.com/', '').replace('.git', '');
-        const category = item.category || '';
-        const source = item.source || '';
-        const tools = item.tools || '';
-        const model = item.model || '';
-        const installCmd = currentTab === 'agents' ? 'aam agents' : 'aam skills';
+      document.getElementById('skills-content').innerHTML = filtered.map(item => renderCard(item, 'skills')).join('');
+    }
 
-        return `
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">${escapeHtml(name)}</div>
-              <div class="card-badges">
-                ${category ? `<div class="card-badge category">${escapeHtml(category)}</div>` : ''}
-                ${source ? `<div class="card-badge source-${source}">${source}</div>` : ''}
-                ${model ? `<div class="card-badge model">${model}</div>` : ''}
-              </div>
-            </div>
-            <div class="card-description">${escapeHtml(desc)}</div>
-            ${tools ? `<div class="card-tools"><strong>Tools:</strong> ${escapeHtml(tools)}</div>` : ''}
-            <div class="card-meta">
-              ${item.stars ? `<span class="card-stars">
-                <svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
-                ${formatStars(item.stars)}
-              </span>` : ''}
-              ${repo ? `<a href="${escapeHtml(repo)}" target="_blank">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                </svg>
-                ${escapeHtml(repoShort)}
-              </a>` : ''}
-            </div>
-            ${repoShort ? `
-            <div class="card-install">
-              <code>${installCmd} ${escapeHtml(repoShort)}</code>
-            </div>
-            ` : ''}
-          </div>
-        `;
-      }).join('');
+    function renderAgents() {
+      const search = document.getElementById('agents-search').value.toLowerCase();
+      const filtered = agents.filter(item => {
+        const text = [item.nick || item.name || '', item.description || '', item.repository || ''].join(' ').toLowerCase();
+        return text.includes(search);
+      });
 
-      document.getElementById('content').innerHTML = html;
+      if (filtered.length === 0) {
+        document.getElementById('agents-content').innerHTML = `<div class="empty"><p>No agents found${search ? ` matching "${search}"` : ''}</p></div>`;
+        return;
+      }
+
+      document.getElementById('agents-content').innerHTML = filtered.map(item => renderCard(item, 'agents')).join('');
     }
 
     function escapeHtml(text) {
@@ -870,26 +890,9 @@
       setTimeout(() => btn.textContent = 'Copy', 2000);
     }
 
-    // Tab switching
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab').forEach(t => {
-        t.classList.remove('active');
-        if (t.dataset.tab === tabName) {
-          t.classList.add('active');
-        }
-      });
-      currentTab = tabName;
-      renderItems();
-    }
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        switchTab(tab.dataset.tab);
-      });
-    });
-
-    // Search
-    document.getElementById('search').addEventListener('input', renderItems);
+    // Search listeners
+    document.getElementById('skills-search').addEventListener('input', renderSkills);
+    document.getElementById('agents-search').addEventListener('input', renderAgents);
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
