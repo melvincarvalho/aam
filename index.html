@@ -67,11 +67,12 @@
     }
 
     .hero h1 {
-      font-size: 3.5rem;
+      font-size: 3.75rem;
       font-weight: 800;
-      line-height: 1.1;
+      line-height: 1.15;
       margin-bottom: 1.25rem;
       color: var(--text);
+      letter-spacing: -0.02em;
     }
 
     .hero h1 .gradient {
@@ -101,12 +102,12 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.875rem 1.5rem;
+      padding: 0.9rem 1.75rem;
       border-radius: 10px;
       font-size: 0.9375rem;
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
       cursor: pointer;
       border: none;
     }
@@ -114,22 +115,26 @@
     .btn-primary {
       background: var(--accent);
       color: white;
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
     }
 
     .btn-primary:hover {
       background: #6d28d9;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
     }
 
     .btn-secondary {
       background: white;
       color: var(--text);
       border: 1.5px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
     .btn-secondary:hover {
       border-color: var(--accent);
       background: #fafaff;
+      transform: translateY(-2px);
     }
 
     .btn-link {
@@ -153,13 +158,14 @@
       margin: 0 auto;
       background: white;
       border-radius: 12px;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      padding: 1.125rem 1.75rem;
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-      font-size: 0.9375rem;
+      font-size: 1rem;
+      border: 1px solid var(--border);
     }
 
     .install-box .prompt {
