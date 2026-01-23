@@ -25,7 +25,12 @@ import {
   removeInstalledAgent,
   updateAgent,
   updateAllAgents,
-  getAgentsDir
+  getAgentsDir,
+  signSkill,
+  signAgent,
+  verifySkill,
+  verifyAgent,
+  getPubkeyFromPrivkey
 } from '../lib/index.js';
 import { startWizard } from '../lib/wizard.js';
 
@@ -45,20 +50,20 @@ Usage: aam <command> [options]
 
 Skill Commands:
   skill[s] <owner/repo>[@version]  Install a skill (local by default)
-  skill[s] -g <owner/repo>         Install a skill globally
-  skill[s] list                    List local installed skills
-  skill[s] list -g                 List global installed skills
+  skill[s] list                    List installed skills
   skill[s] update [name]           Update all or specific skill
-  skill[s] remove <name>           Remove a local skill
+  skill[s] remove <name>           Remove an installed skill
+  skill[s] sign <name>             Sign a skill (kind 31337 Nostr event)
+  skill[s] verify <name>           Verify a skill signature
   skill[s] search                  Browse available skills from registry
 
 Agent Commands:
   agent[s] <owner/repo>[@version]  Install an agent (local by default)
-  agent[s] -g <owner/repo>         Install an agent globally
-  agent[s] list                    List local installed agents
-  agent[s] list -g                 List global installed agents
+  agent[s] list                    List installed agents
   agent[s] update [name]           Update all or specific agent
-  agent[s] remove <name>           Remove a local agent
+  agent[s] remove <name>           Remove an installed agent
+  agent[s] sign <name>             Sign an agent (kind 31337 Nostr event)
+  agent[s] verify <name>           Verify an agent signature
   agent[s] search                  Browse available agents from registry
 
 A2A Commands:
@@ -250,6 +255,85 @@ function handleSkillCommand(subcommand, args) {
       });
       break;
 
+    case 'sign':
+      const signSkillArg = args[0];
+      const signPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
+
+      if (!signSkillArg) {
+        console.error('Error: Skill name or path required');
+        console.error('Example: aam skill sign my-skill --privkey <hex>');
+        process.exit(1);
+      }
+
+      if (!signPrivkey) {
+        console.error('Error: Private key required');
+        console.error('Use --privkey <hex> or set AAM_PRIVKEY environment variable');
+        process.exit(1);
+      }
+
+      // Find skill path
+      const isGlobalSign = argv.g || argv.global;
+      let signSkillPath = signSkillArg;
+      if (!fs.existsSync(signSkillArg)) {
+        const skillsDir = getSkillsDir(isGlobalSign);
+        signSkillPath = path.join(skillsDir, signSkillArg);
+      }
+
+      const signResult = signSkill(signSkillPath, signPrivkey, {
+        repo: argv.repo,
+        version: argv.version
+      });
+
+      if (signResult.success) {
+        console.log(`✓ Skill signed successfully`);
+        console.log(`  Pubkey: ${signResult.pubkey}`);
+        console.log(`  Hash: ${signResult.hash}`);
+        console.log(`  Signature: ${signResult.path}`);
+      } else {
+        console.error('Error:', signResult.error);
+        process.exit(1);
+      }
+      break;
+
+    case 'verify':
+      const verifySkillArg = args[0];
+
+      if (!verifySkillArg) {
+        console.error('Error: Skill name or path required');
+        console.error('Example: aam skill verify my-skill');
+        process.exit(1);
+      }
+
+      // Find skill path
+      const isGlobalVerify = argv.g || argv.global;
+      let verifySkillPath = verifySkillArg;
+      if (!fs.existsSync(verifySkillArg)) {
+        const skillsDir = getSkillsDir(isGlobalVerify);
+        verifySkillPath = path.join(skillsDir, verifySkillArg);
+      }
+
+      const verifyResult = verifySkill(verifySkillPath, {
+        expectedPubkey: argv.pubkey
+      });
+
+      if (verifyResult.success) {
+        if (verifyResult.verified) {
+          console.log(`✓ Signature verified`);
+          console.log(`  Signed by: ${verifyResult.pubkey}`);
+          console.log(`  Signed at: ${verifyResult.signedAt}`);
+          console.log(`  Hash: ${verifyResult.hash}`);
+        } else if (verifyResult.unsigned) {
+          console.log(`⚠ No signature found (unsigned)`);
+        } else {
+          console.log(`✗ Verification failed: ${verifyResult.error}`);
+          process.exit(1);
+        }
+      } else {
+        console.error('Error:', verifyResult.error);
+        process.exit(1);
+      }
+      break;
+
     default:
       console.log('Usage: aam skills <command> [options]');
       console.log('');
@@ -257,6 +341,8 @@ function handleSkillCommand(subcommand, args) {
       console.log('  aam skills <owner/repo>    Install a skill (local by default)');
       console.log('  aam skills list            List installed skills');
       console.log('  aam skills remove <name>   Remove an installed skill');
+      console.log('  aam skills sign <name>     Sign a skill with your privkey');
+      console.log('  aam skills verify <name>   Verify a skill signature');
       console.log('  aam skills search          Browse available skills');
       console.log('');
       console.log('Options:');
@@ -420,6 +506,85 @@ function handleAgentCommand(subcommand, args) {
       });
       break;
 
+    case 'sign':
+      const signAgentArg = args[0];
+      const signAgentPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
+
+      if (!signAgentArg) {
+        console.error('Error: Agent name or path required');
+        console.error('Example: aam agent sign my-agent --privkey <hex>');
+        process.exit(1);
+      }
+
+      if (!signAgentPrivkey) {
+        console.error('Error: Private key required');
+        console.error('Use --privkey <hex> or set AAM_PRIVKEY environment variable');
+        process.exit(1);
+      }
+
+      // Find agent path
+      const isGlobalAgentSign = argv.g || argv.global;
+      let signAgentPath = signAgentArg;
+      if (!fs.existsSync(signAgentArg)) {
+        const agentsDir = getAgentsDir(isGlobalAgentSign);
+        signAgentPath = path.join(agentsDir, signAgentArg.endsWith('.md') ? signAgentArg : `${signAgentArg}.md`);
+      }
+
+      const signAgentResult = signAgent(signAgentPath, signAgentPrivkey, {
+        repo: argv.repo,
+        version: argv.version
+      });
+
+      if (signAgentResult.success) {
+        console.log(`✓ Agent signed successfully`);
+        console.log(`  Pubkey: ${signAgentResult.pubkey}`);
+        console.log(`  Hash: ${signAgentResult.hash}`);
+        console.log(`  Signature: ${signAgentResult.path}`);
+      } else {
+        console.error('Error:', signAgentResult.error);
+        process.exit(1);
+      }
+      break;
+
+    case 'verify':
+      const verifyAgentArg = args[0];
+
+      if (!verifyAgentArg) {
+        console.error('Error: Agent name or path required');
+        console.error('Example: aam agent verify my-agent');
+        process.exit(1);
+      }
+
+      // Find agent path
+      const isGlobalAgentVerify = argv.g || argv.global;
+      let verifyAgentPath = verifyAgentArg;
+      if (!fs.existsSync(verifyAgentArg)) {
+        const agentsDir = getAgentsDir(isGlobalAgentVerify);
+        verifyAgentPath = path.join(agentsDir, verifyAgentArg.endsWith('.md') ? verifyAgentArg : `${verifyAgentArg}.md`);
+      }
+
+      const verifyAgentResult = verifyAgent(verifyAgentPath, {
+        expectedPubkey: argv.pubkey
+      });
+
+      if (verifyAgentResult.success) {
+        if (verifyAgentResult.verified) {
+          console.log(`✓ Signature verified`);
+          console.log(`  Signed by: ${verifyAgentResult.pubkey}`);
+          console.log(`  Signed at: ${verifyAgentResult.signedAt}`);
+          console.log(`  Hash: ${verifyAgentResult.hash}`);
+        } else if (verifyAgentResult.unsigned) {
+          console.log(`⚠ No signature found (unsigned)`);
+        } else {
+          console.log(`✗ Verification failed: ${verifyAgentResult.error}`);
+          process.exit(1);
+        }
+      } else {
+        console.error('Error:', verifyAgentResult.error);
+        process.exit(1);
+      }
+      break;
+
     default:
       console.log('Usage: aam agents <command> [options]');
       console.log('');
@@ -427,6 +592,8 @@ function handleAgentCommand(subcommand, args) {
       console.log('  aam agents <owner/repo>    Install an agent (local by default)');
       console.log('  aam agents list            List installed agents');
       console.log('  aam agents remove <name>   Remove an installed agent');
+      console.log('  aam agents sign <name>     Sign an agent with your privkey');
+      console.log('  aam agents verify <name>   Verify an agent signature');
       console.log('  aam agents search          Browse available agents');
       console.log('');
       console.log('Options:');

@@ -1,6 +1,6 @@
 {
   "name": "aam",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "Agent-to-Agent Manager for A2A protocol",
   "main": "lib/index.js",
   "type": "module",
@@ -32,6 +32,7 @@
     "figlet": "^1.7.0",
     "inquirer": "^9.2.12",
     "minimist": "^1.2.8",
+    "nostr-tools": "^2.20.0",
     "ora": "^7.0.1"
   },
   "devDependencies": {
