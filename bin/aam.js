@@ -12,7 +12,12 @@ import {
   searchAgents,
   searchSkills,
   importSkill,
-  registerAgent
+  registerAgent,
+  addFromRepo,
+  listInstalled,
+  removeInstalled,
+  fetchRemoteRegistry,
+  getSkillsDir
 } from '../lib/index.js';
 import { startWizard } from '../lib/wizard.js';
 
@@ -31,6 +36,11 @@ Agent-to-Agent Manager (AAM) - A utility for working with A2A protocol agents
 Usage: aam <command> [options]
 
 Commands:
+  add <repo>                Install a skill from GitHub (e.g., aam add owner/repo)
+  list                      List installed skills
+  remove <name>             Remove an installed skill
+  remote [type]             List skills/agents from remote registry
+
   init                      Initialize the project with necessary templates and directories
   create-agent [options]    Create an agent card in .well-known/agent.json
   add-skill [options]       Add a skill to an agent card
@@ -42,6 +52,13 @@ Commands:
   help                      Display this help information
 
 Examples:
+  aam add melvincarvalho/skill-git           # Install skill from GitHub
+  aam add https://github.com/user/skill.git  # Install from full URL
+  aam list                                   # Show installed skills
+  aam remove skill-git                       # Uninstall a skill
+  aam remote skills                          # List available skills
+  aam remote agents                          # List available agents
+
   aam init
   aam wizard
   aam create-agent --name "My Agent" --description "A custom A2A agent" --url "https://example.com/a2a"
@@ -80,6 +97,105 @@ function parseSkillFromArgs (args) {
 const command = argv._[0];
 
 switch (command) {
+  case 'add':
+    const repoArg = argv._[1];
+
+    if (!repoArg) {
+      console.error('Error: Repository is required');
+      console.error('Example: aam add melvincarvalho/skill-git');
+      process.exit(1);
+    }
+
+    console.log(`Installing skill from ${repoArg}...`);
+    const installResult = addFromRepo(repoArg, { force: argv.force });
+
+    if (installResult.success) {
+      console.log(`\n✓ Successfully installed "${installResult.skill.name}"`);
+      console.log(`  Location: ${installResult.path}`);
+      if (installResult.skill.description) {
+        console.log(`  Description: ${installResult.skill.description}`);
+      }
+    } else {
+      console.error('Error:', installResult.error);
+      process.exit(1);
+    }
+    break;
+
+  case 'list':
+    const listResult = listInstalled();
+
+    if (listResult.success) {
+      if (listResult.skills.length === 0) {
+        console.log('No skills installed.');
+        console.log('\nInstall skills with: aam add <owner/repo>');
+      } else {
+        console.log(`Installed skills (${listResult.skills.length}):\n`);
+        listResult.skills.forEach(skill => {
+          console.log(`  ${skill.name}${skill.version ? ` v${skill.version}` : ''}`);
+          if (skill.description) {
+            console.log(`    ${skill.description}`);
+          }
+          if (skill.source) {
+            console.log(`    Source: ${skill.source}`);
+          }
+          console.log();
+        });
+        console.log(`Skills directory: ${getSkillsDir()}`);
+      }
+    } else {
+      console.error('Error:', listResult.error);
+      process.exit(1);
+    }
+    break;
+
+  case 'remove':
+    const removeArg = argv._[1];
+
+    if (!removeArg) {
+      console.error('Error: Skill name is required');
+      console.error('Example: aam remove skill-git');
+      process.exit(1);
+    }
+
+    const removeResult = removeInstalled(removeArg);
+
+    if (removeResult.success) {
+      console.log(`✓ Successfully removed "${removeArg}"`);
+    } else {
+      console.error('Error:', removeResult.error);
+      process.exit(1);
+    }
+    break;
+
+  case 'remote':
+    const remoteType = argv._[1] || 'skills';
+
+    console.log(`Fetching ${remoteType} from remote registry...`);
+    fetchRemoteRegistry(remoteType).then(remoteResult => {
+      if (remoteResult.success) {
+        const items = remoteResult.data;
+        console.log(`\nAvailable ${remoteType} (${items.length}):\n`);
+
+        items.forEach(item => {
+          const name = item.nick || item.name || item.id;
+          console.log(`  ${name}`);
+          if (item.description) {
+            console.log(`    ${item.description}`);
+          }
+          if (item.repository) {
+            console.log(`    Repository: ${item.repository}`);
+          }
+          console.log();
+        });
+
+        console.log(`Install with: aam add <repository>`);
+      } else {
+        console.error('Error:', remoteResult.error);
+        process.exit(1);
+      }
+    });
+    break;
+
   case 'wizard':
     // Start the interactive wizard
     startWizard();

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAM - Agentic App Manager | The Registry for Agentic Apps</title>
+  <meta name="description" content="Discover, create and manage Agentic Apps and composable skills with AAM - the npm for AI agents.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-card-hover: #1a1a25;
+      --border: #2a2a3a;
+      --text: #e4e4e7;
+      --text-dim: #71717a;
+      --accent: #8b5cf6;
+      --accent-soft: #8b5cf620;
+      --green: #22c55e;
+      --blue: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .header-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .header-links a:hover {
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text), var(--text-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--text-dim);
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .install-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.875rem;
+    }
+
+    .install-box code {
+      color: var(--green);
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .copy-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Search */
+    .search-section {
+      padding: 2rem 0;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .search-input {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .tab {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      border-color: var(--text-dim);
+    }
+
+    .tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .tab .count {
+      background: rgba(255,255,255,0.2);
+      padding: 0.125rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1rem;
+      padding-bottom: 4rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .card-badge {
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .card-description {
+      color: var(--text-dim);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .card-meta a {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .card-meta a:hover {
+      text-decoration: underline;
+    }
+
+    .card-install {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-install code {
+      background: var(--bg);
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--green);
+      display: block;
+      overflow-x: auto;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      color: var(--text-dim);
+      font-size: 0.875rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.875rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 4rem;
+      color: var(--text-dim);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 4rem;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="logo">AAM</div>
+      <div class="header-links">
+        <a href="https://github.com/melvincarvalho/aam">GitHub</a>
+        <a href="https://www.npmjs.com/package/aam">npm</a>
+        <a href="https://google.github.io/A2A/">A2A Protocol</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>The Registry for <span>Agentic Apps</span></h1>
+        <p>Discover, create and manage AI agent skills. The npm for agents.</p>
+        <div class="install-box">
+          <code>npm install -g aam</code>
+          <button class="copy-btn" onclick="copyInstall()">Copy</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-value" id="skills-count">-</div>
+        <div class="stat-label">Skills</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="agents-count">-</div>
+        <div class="stat-label">Agents</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">A2A</div>
+        <div class="stat-label">Protocol</div>
+      </div>
+    </section>
+
+    <section class="search-section">
+      <div class="container">
+        <div class="search-box">
+          <input type="text" class="search-input" id="search" placeholder="Search skills and agents...">
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="tabs">
+        <button class="tab active" data-tab="skills">Skills <span class="count" id="skills-tab-count">0</span></button>
+        <button class="tab" data-tab="agents">Agents <span class="count" id="agents-tab-count">0</span></button>
+      </div>
+
+      <div id="content" class="grid">
+        <div class="loading">
+          <div class="spinner"></div>
+          Loading registry...
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>AAM - Agentic App Manager | <a href="https://github.com/melvincarvalho/aam">Open Source</a> | MIT License</p>
+    </div>
+  </footer>
+
+  <script>
+    const SKILLS_URL = 'https://raw.githubusercontent.com/melvincarvalho/aam/gh-pages/skills.json';
+    const AGENTS_URL = 'https://raw.githubusercontent.com/melvincarvalho/aam/gh-pages/registry.json';
+
+    let skills = [];
+    let agents = [];
+    let currentTab = 'skills';
+
+    async function loadData() {
+      try {
+        const [skillsRes, agentsRes] = await Promise.all([
+          fetch(SKILLS_URL),
+          fetch(AGENTS_URL)
+        ]);
+
+        skills = await skillsRes.json();
+        agents = await agentsRes.json();
+
+        document.getElementById('skills-count').textContent = skills.length;
+        document.getElementById('agents-count').textContent = agents.length;
+        document.getElementById('skills-tab-count').textContent = skills.length;
+        document.getElementById('agents-tab-count').textContent = agents.length;
+
+        renderItems();
+      } catch (err) {
+        document.getElementById('content').innerHTML = `
+          <div class="empty">
+            <p>Failed to load registry. Please try again later.</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderItems() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const items = currentTab === 'skills' ? skills : agents;
+
+      const filtered = items.filter(item => {
+        const text = [
+          item.nick || item.name || '',
+          item.description || '',
+          item.repository || ''
+        ].join(' ').toLowerCase();
+        return text.includes(search);
+      });
+
+      if (filtered.length === 0) {
+        document.getElementById('content').innerHTML = `
+          <div class="empty">
+            <p>No ${currentTab} found matching "${search}"</p>
+          </div>
+        `;
+        return;
+      }
+
+      const html = filtered.map(item => {
+        const name = item.nick || item.name || 'Unknown';
+        const desc = item.description || 'No description available';
+        const repo = item.repository || '';
+        const repoShort = repo.replace('https://github.com/', '').replace('.git', '');
+
+        return `
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">${escapeHtml(name)}</div>
+              <div class="card-badge">${currentTab === 'skills' ? 'Skill' : 'Agent'}</div>
+            </div>
+            <div class="card-description">${escapeHtml(desc)}</div>
+            <div class="card-meta">
+              ${repo ? `<a href="${escapeHtml(repo)}" target="_blank">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+                ${escapeHtml(repoShort)}
+              </a>` : ''}
+            </div>
+            ${repoShort ? `
+            <div class="card-install">
+              <code>aam add ${escapeHtml(repoShort)}</code>
+            </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('content').innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function copyInstall() {
+      navigator.clipboard.writeText('npm install -g aam');
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentTab = tab.dataset.tab;
+        renderItems();
+      });
+    });
+
+    // Search
+    document.getElementById('search').addEventListener('input', renderItems);
+
+    // Load data
+    loadData();
+  </script>
+</body>
+</html>
