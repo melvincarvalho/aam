@@ -10,16 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0f;
-      --bg-card: #12121a;
-      --bg-card-hover: #1a1a25;
-      --border: #2a2a3a;
-      --text: #e4e4e7;
-      --text-dim: #71717a;
-      --accent: #8b5cf6;
-      --accent-soft: #8b5cf620;
-      --green: #22c55e;
-      --blue: #3b82f6;
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-dim: #64748b;
+      --accent: #7c3aed;
+      --accent-soft: #7c3aed15;
+      --green: #16a34a;
+      --blue: #2563eb;
     }
 
     * {
@@ -89,10 +89,7 @@
       font-size: 3rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      background: linear-gradient(135deg, var(--text), var(--text-dim));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--text);
     }
 
     .hero h1 span {
@@ -225,12 +222,14 @@
       border-radius: 16px;
       padding: 1.5rem;
       transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .card:hover {
       background: var(--bg-card-hover);
       border-color: var(--accent);
       transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     .card-header {
@@ -286,7 +285,8 @@
     }
 
     .card-install code {
-      background: var(--bg);
+      background: #f1f5f9;
+      border: 1px solid var(--border);
       padding: 0.5rem 0.75rem;
       border-radius: 8px;
       font-size: 0.75rem;
