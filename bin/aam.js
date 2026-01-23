@@ -55,7 +55,7 @@ Skill Commands:
   skill[s] list                    List installed skills (shows ✓/⚠/✗ signature status)
   skill[s] update [name]           Update all or specific skill
   skill[s] remove <name>           Remove an installed skill
-  skill[s] sign <name>             Sign a skill (kind 31337 Nostr event)
+  skill[s] sign <name> --repo <owner/repo>  Sign a skill (requires AAM_PRIVKEY)
   skill[s] verify <name>           Verify a skill signature
   skill[s] search                  Browse available skills from registry
 
@@ -64,7 +64,7 @@ Agent Commands:
   agent[s] list                    List installed agents (shows ✓/⚠/✗ signature status)
   agent[s] update [name]           Update all or specific agent
   agent[s] remove <name>           Remove an installed agent
-  agent[s] sign <name>             Sign an agent (kind 31337 Nostr event)
+  agent[s] sign <name> --repo <owner/repo>  Sign an agent (requires AAM_PRIVKEY)
   agent[s] verify <name>           Verify an agent signature
   agent[s] search                  Browse available agents from registry
 
@@ -85,6 +85,8 @@ Options:
   --force                   Overwrite existing skill/agent
   --full                    Clone full repo instead of just SKILL.md/agent.md
   --verify                  Verify signature after install
+  --repo <owner/repo>       GitHub repo for signing (required for sign command)
+  --privkey <hex>           Private key for signing (or set AAM_PRIVKEY env var)
 
 Signature Legend:
   ✓  Verified signature
@@ -96,6 +98,8 @@ Examples:
   aam skill anthropics/skills@v1.0.0          # Install specific version
   aam skill anthropics/skills --verify        # Install and verify signature
   aam skill -g anthropics/skills              # Install to ~/.claude/skills/
+  aam skill sign my-skill --repo user/repo    # Sign a skill (needs AAM_PRIVKEY)
+  aam skill verify my-skill                   # Verify skill signature
   aam agent user/code-reviewer                # Install to ./.claude/agents/
   aam agent -g user/code-reviewer             # Install to ~/.claude/agents/
   aam search git                              # Search for skills/agents matching "git"
