@@ -36,10 +36,13 @@ Agent-to-Agent Manager (AAM) - A utility for working with A2A protocol agents
 Usage: aam <command> [options]
 
 Skill Commands:
-  skill <owner/repo>        Install a skill from GitHub
-  skill list                List installed skills
-  skill remove <name>       Remove an installed skill
-  skill search              Browse available skills from registry
+  skills <owner/repo>        Install a skill (local by default)
+  skills -g <owner/repo>     Install a skill globally
+  skills list                List local installed skills
+  skills list -g             List global installed skills
+  skills remove <name>       Remove a local skill
+  skills remove -g <name>    Remove a global skill
+  skills search              Browse available skills from registry
 
 Agent Commands:
   init                      Initialize agent card in .well-known/agent.json
@@ -51,17 +54,16 @@ Other Commands:
   wizard                    Start interactive wizard with guided UI
   help                      Display this help information
 
-Examples:
-  aam skills anthropics/skills                # Install skill from GitHub
-  aam skills https://github.com/user/repo     # Install from full URL
-  aam skills list                             # Show installed skills
-  aam skills remove my-skill                  # Uninstall a skill
-  aam skills search                           # Browse available skills
+Options:
+  -g, --global              Use global directory (~/.claude/skills/)
+  --force                   Overwrite existing skill
+  --full                    Clone full repo instead of just SKILL.md
 
-  aam init
-  aam wizard
-  aam create-agent --name "My Agent" --description "A custom agent"
-  aam search-agents chatbot
+Examples:
+  aam skills anthropics/skills                # Install to ./.claude/skills/
+  aam skills -g anthropics/skills             # Install to ~/.claude/skills/
+  aam skills list                             # List local skills
+  aam skills list -g                          # List global skills
   `);
 }
 
@@ -93,10 +95,11 @@ function handleSkillCommand(subcommand, args) {
   // If subcommand contains '/' or starts with 'http', treat as implicit add
   if (subcommand && (subcommand.includes('/') || subcommand.startsWith('http'))) {
     const repoArg = subcommand;
-    console.log(`Installing skill from ${repoArg}...`);
-    addFromRepo(repoArg, { force: argv.force, full: argv.full }).then(installResult => {
+    const isGlobal = argv.g || argv.global;
+    console.log(`Installing skill from ${repoArg}${isGlobal ? ' (global)' : ''}...`);
+    addFromRepo(repoArg, { force: argv.force, full: argv.full, global: isGlobal }).then(installResult => {
       if (installResult.success) {
-        console.log(`\n✓ Successfully installed "${installResult.skill.name}"`);
+        console.log(`\n✓ Successfully installed "${installResult.skill.name}"${isGlobal ? ' globally' : ''}`);
         console.log(`  Location: ${installResult.path}`);
         if (installResult.skill.description) {
           console.log(`  Description: ${installResult.skill.description}`);
@@ -115,14 +118,16 @@ function handleSkillCommand(subcommand, args) {
   switch (subcommand) {
     case 'list':
     case 'ls':
-      const listResult = listInstalled();
+      const isGlobalList = argv.g || argv.global;
+      const listResult = listInstalled({ global: isGlobalList });
 
       if (listResult.success) {
+        const scopeLabel = isGlobalList ? 'Global' : 'Local';
         if (listResult.skills.length === 0) {
-          console.log('No skills installed.');
-          console.log('\nInstall skills with: aam skills <owner/repo>');
+          console.log(`No ${scopeLabel.toLowerCase()} skills installed.`);
+          console.log(`\nInstall skills with: aam skills${isGlobalList ? ' -g' : ''} <owner/repo>`);
         } else {
-          console.log(`Installed skills (${listResult.skills.length}):\n`);
+          console.log(`${scopeLabel} skills (${listResult.skills.length}):\n`);
           listResult.skills.forEach(skill => {
             console.log(`  ${skill.name}${skill.version ? ` v${skill.version}` : ''}`);
             if (skill.description) {
@@ -133,7 +138,7 @@ function handleSkillCommand(subcommand, args) {
             }
             console.log();
           });
-          console.log(`Skills directory: ${getSkillsDir()}`);
+          console.log(`Skills directory: ${listResult.path}`);
         }
       } else {
         console.error('Error:', listResult.error);
@@ -151,10 +156,11 @@ function handleSkillCommand(subcommand, args) {
         process.exit(1);
       }
 
-      const removeResult = removeInstalled(removeArg);
+      const isGlobalRemove = argv.g || argv.global;
+      const removeResult = removeInstalled(removeArg, { global: isGlobalRemove });
 
       if (removeResult.success) {
-        console.log(`✓ Successfully removed "${removeArg}"`);
+        console.log(`✓ Successfully removed "${removeArg}"${isGlobalRemove ? ' (global)' : ''}`);
       } else {
         console.error('Error:', removeResult.error);
         process.exit(1);
@@ -190,17 +196,24 @@ function handleSkillCommand(subcommand, args) {
       break;
 
     default:
-      console.log('Usage: aam skills <command>');
+      console.log('Usage: aam skills <command> [options]');
       console.log('');
       console.log('Commands:');
-      console.log('  aam skills <owner/repo>    Install a skill from GitHub');
+      console.log('  aam skills <owner/repo>    Install a skill (local by default)');
       console.log('  aam skills list            List installed skills');
       console.log('  aam skills remove <name>   Remove an installed skill');
       console.log('  aam skills search          Browse available skills');
       console.log('');
+      console.log('Options:');
+      console.log('  -g, --global               Install/list/remove globally (~/.claude/skills/)');
+      console.log('  --force                    Overwrite existing skill');
+      console.log('  --full                     Clone full repo instead of just SKILL.md');
+      console.log('');
       console.log('Examples:');
-      console.log('  aam skills anthropics/skills');
-      console.log('  aam skills list');
+      console.log('  aam skills anthropics/skills       # Install to ./.claude/skills/');
+      console.log('  aam skills -g anthropics/skills    # Install to ~/.claude/skills/');
+      console.log('  aam skills list                    # List local skills');
+      console.log('  aam skills list -g                 # List global skills');
       console.log('  aam skills remove my-skill');
       break;
   }
