@@ -17,7 +17,11 @@ import {
   listInstalled,
   removeInstalled,
   fetchRemoteRegistry,
-  getSkillsDir
+  getSkillsDir,
+  addAgentFromRepo,
+  listInstalledAgents,
+  removeInstalledAgent,
+  getAgentsDir
 } from '../lib/index.js';
 import { startWizard } from '../lib/wizard.js';
 
@@ -45,10 +49,18 @@ Skill Commands:
   skills search              Browse available skills from registry
 
 Agent Commands:
+  agents <owner/repo>        Install an agent (local by default)
+  agents -g <owner/repo>     Install an agent globally
+  agents list                List local installed agents
+  agents list -g             List global installed agents
+  agents remove <name>       Remove a local agent
+  agents remove -g <name>    Remove a global agent
+  agents search              Browse available agents from registry
+
+A2A Commands:
   init                      Initialize agent card in .well-known/agent.json
   create-agent [options]    Create an agent card with options
   register-agent            Register agent in the registry
-  search-agents <query>     Search for agents in the registry
 
 Other Commands:
   wizard                    Start interactive wizard with guided UI
@@ -62,8 +74,8 @@ Options:
 Examples:
   aam skills anthropics/skills                # Install to ./.claude/skills/
   aam skills -g anthropics/skills             # Install to ~/.claude/skills/
-  aam skills list                             # List local skills
-  aam skills list -g                          # List global skills
+  aam agents user/code-reviewer               # Install to ./.claude/agents/
+  aam agents -g user/code-reviewer            # Install to ~/.claude/agents/
   `);
 }
 
@@ -219,12 +231,148 @@ function handleSkillCommand(subcommand, args) {
   }
 }
 
+// Agents subcommand handler
+function handleAgentCommand(subcommand, args) {
+  // If subcommand contains '/' or starts with 'http', treat as implicit add
+  if (subcommand && (subcommand.includes('/') || subcommand.startsWith('http'))) {
+    const repoArg = subcommand;
+    const isGlobal = argv.g || argv.global;
+    console.log(`Installing agent from ${repoArg}${isGlobal ? ' (global)' : ''}...`);
+    addAgentFromRepo(repoArg, { force: argv.force, full: argv.full, global: isGlobal }).then(installResult => {
+      if (installResult.success) {
+        console.log(`\n✓ Successfully installed "${installResult.agent.name}"${isGlobal ? ' globally' : ''}`);
+        console.log(`  Location: ${installResult.path}`);
+        if (installResult.agent.description) {
+          console.log(`  Description: ${installResult.agent.description}`);
+        }
+        if (installResult.agent.installMode) {
+          console.log(`  Mode: ${installResult.agent.installMode}`);
+        }
+      } else {
+        console.error('Error:', installResult.error);
+        process.exit(1);
+      }
+    });
+    return;
+  }
+
+  switch (subcommand) {
+    case 'list':
+    case 'ls':
+      const isGlobalList = argv.g || argv.global;
+      const listResult = listInstalledAgents({ global: isGlobalList });
+
+      if (listResult.success) {
+        const scopeLabel = isGlobalList ? 'Global' : 'Local';
+        if (listResult.agents.length === 0) {
+          console.log(`No ${scopeLabel.toLowerCase()} agents installed.`);
+          console.log(`\nInstall agents with: aam agents${isGlobalList ? ' -g' : ''} <owner/repo>`);
+        } else {
+          console.log(`${scopeLabel} agents (${listResult.agents.length}):\n`);
+          listResult.agents.forEach(agent => {
+            console.log(`  ${agent.name}${agent.displayName ? ` (${agent.displayName})` : ''}`);
+            if (agent.description) {
+              console.log(`    ${agent.description}`);
+            }
+            if (agent.tools) {
+              console.log(`    Tools: ${agent.tools}`);
+            }
+            if (agent.model) {
+              console.log(`    Model: ${agent.model}`);
+            }
+            console.log();
+          });
+          console.log(`Agents directory: ${listResult.path}`);
+        }
+      } else {
+        console.error('Error:', listResult.error);
+        process.exit(1);
+      }
+      break;
+
+    case 'remove':
+    case 'rm':
+      const removeArg = args[0];
+
+      if (!removeArg) {
+        console.error('Error: Agent name is required');
+        console.error('Example: aam agents remove my-agent');
+        process.exit(1);
+      }
+
+      const isGlobalRemove = argv.g || argv.global;
+      const removeResult = removeInstalledAgent(removeArg, { global: isGlobalRemove });
+
+      if (removeResult.success) {
+        console.log(`✓ Successfully removed "${removeArg}"${isGlobalRemove ? ' (global)' : ''}`);
+      } else {
+        console.error('Error:', removeResult.error);
+        process.exit(1);
+      }
+      break;
+
+    case 'remote':
+    case 'search':
+      console.log('Fetching agents from remote registry...');
+      fetchRemoteRegistry('agents').then(remoteResult => {
+        if (remoteResult.success) {
+          const items = remoteResult.data;
+          console.log(`\nAvailable agents (${items.length}):\n`);
+
+          items.forEach(item => {
+            const name = item.nick || item.name || item.id;
+            console.log(`  ${name}`);
+            if (item.description) {
+              console.log(`    ${item.description}`);
+            }
+            if (item.repository) {
+              console.log(`    Repository: ${item.repository}`);
+            }
+            console.log();
+          });
+
+          console.log(`Install with: aam agents <repository>`);
+        } else {
+          console.error('Error:', remoteResult.error);
+          process.exit(1);
+        }
+      });
+      break;
+
+    default:
+      console.log('Usage: aam agents <command> [options]');
+      console.log('');
+      console.log('Commands:');
+      console.log('  aam agents <owner/repo>    Install an agent (local by default)');
+      console.log('  aam agents list            List installed agents');
+      console.log('  aam agents remove <name>   Remove an installed agent');
+      console.log('  aam agents search          Browse available agents');
+      console.log('');
+      console.log('Options:');
+      console.log('  -g, --global               Install/list/remove globally (~/.claude/agents/)');
+      console.log('  --force                    Overwrite existing agent');
+      console.log('  --full                     Clone full repo instead of just agent.md');
+      console.log('');
+      console.log('Examples:');
+      console.log('  aam agents user/code-reviewer       # Install to ./.claude/agents/');
+      console.log('  aam agents -g user/code-reviewer    # Install to ~/.claude/agents/');
+      console.log('  aam agents list                     # List local agents');
+      console.log('  aam agents list -g                  # List global agents');
+      console.log('  aam agents remove my-agent');
+      break;
+  }
+}
+
 // MAIN
 const command = argv._[0];
 
 switch (command) {
   case 'skills':
     handleSkillCommand(argv._[1], argv._.slice(2));
+    break;
+
+  case 'agents':
+    handleAgentCommand(argv._[1], argv._.slice(2));
     break;
 
   // Legacy commands (keep for backwards compatibility)

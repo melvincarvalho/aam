@@ -1,6 +1,6 @@
 {
   "name": "aam",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "description": "Agent-to-Agent Manager for A2A protocol",
   "main": "lib/index.js",
   "type": "module",

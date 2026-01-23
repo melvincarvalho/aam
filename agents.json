@@ -1,0 +1,137 @@
+[
+  {
+    "nick": "code-reviewer",
+    "name": "Code Reviewer",
+    "description": "Reviews code for quality, security, and best practices",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "development",
+    "tools": "Read, Grep, Glob, Bash",
+    "model": "inherit"
+  },
+  {
+    "nick": "debugger",
+    "name": "Debugger",
+    "description": "Debugging specialist for errors and test failures with root cause analysis",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "development",
+    "tools": "Read, Edit, Bash, Grep, Glob",
+    "model": "inherit"
+  },
+  {
+    "nick": "security-auditor",
+    "name": "Security Auditor",
+    "description": "Scans code for vulnerabilities, secrets, and security issues",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "security",
+    "tools": "Read, Grep, Glob, Bash",
+    "model": "sonnet"
+  },
+  {
+    "nick": "test-writer",
+    "name": "Test Writer",
+    "description": "Generates comprehensive test suites with edge cases and mocks",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "testing",
+    "tools": "Read, Write, Edit, Bash, Grep, Glob",
+    "model": "inherit"
+  },
+  {
+    "nick": "refactorer",
+    "name": "Refactorer",
+    "description": "Improves code structure without changing behavior",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "development",
+    "tools": "Read, Edit, Grep, Glob",
+    "model": "inherit"
+  },
+  {
+    "nick": "doc-writer",
+    "name": "Documentation Writer",
+    "description": "Generates clear documentation, READMEs, and API docs",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "documentation",
+    "tools": "Read, Write, Grep, Glob",
+    "model": "haiku"
+  },
+  {
+    "nick": "explorer",
+    "name": "Codebase Explorer",
+    "description": "Fast read-only agent for searching and understanding codebases",
+    "repository": "https://github.com/anthropics/skills",
+    "category": "exploration",
+    "tools": "Read, Grep, Glob",
+    "model": "haiku"
+  },
+  {
+    "nick": "pr-reviewer",
+    "name": "PR Reviewer",
+    "description": "Reviews pull requests with detailed feedback and suggestions",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "development",
+    "tools": "Read, Grep, Glob, Bash",
+    "model": "sonnet"
+  },
+  {
+    "nick": "architect",
+    "name": "Software Architect",
+    "description": "Designs system architecture and makes high-level technical decisions",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "design",
+    "tools": "Read, Grep, Glob, Write",
+    "model": "opus"
+  },
+  {
+    "nick": "performance-optimizer",
+    "name": "Performance Optimizer",
+    "description": "Identifies and fixes performance bottlenecks",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "optimization",
+    "tools": "Read, Edit, Bash, Grep, Glob",
+    "model": "sonnet"
+  },
+  {
+    "nick": "api-designer",
+    "name": "API Designer",
+    "description": "Designs RESTful APIs with OpenAPI specs and best practices",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "design",
+    "tools": "Read, Write, Grep, Glob",
+    "model": "sonnet"
+  },
+  {
+    "nick": "database-expert",
+    "name": "Database Expert",
+    "description": "SQL queries, schema design, and database optimization",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "data",
+    "tools": "Bash, Read, Write",
+    "model": "sonnet"
+  },
+  {
+    "nick": "devops-engineer",
+    "name": "DevOps Engineer",
+    "description": "CI/CD pipelines, Docker, Kubernetes, and infrastructure",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "infrastructure",
+    "tools": "Read, Write, Edit, Bash, Grep, Glob",
+    "model": "sonnet"
+  },
+  {
+    "nick": "tech-writer",
+    "name": "Technical Writer",
+    "description": "Creates user guides, tutorials, and technical documentation",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "documentation",
+    "tools": "Read, Write, Grep, Glob",
+    "model": "haiku"
+  },
+  {
+    "nick": "ux-reviewer",
+    "name": "UX Reviewer",
+    "description": "Reviews UI/UX for accessibility and user experience",
+    "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+    "category": "design",
+    "tools": "Read, Grep, Glob",
+    "model": "sonnet"
+  }
+]

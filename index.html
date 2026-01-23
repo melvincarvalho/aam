@@ -467,11 +467,29 @@
       color: #7c3aed;
     }
 
+    .card-badge.model {
+      background: #f0fdf4;
+      color: #166534;
+    }
+
     .card-description {
       color: var(--text-dim);
       font-size: 0.875rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       line-height: 1.5;
+    }
+
+    .card-tools {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+      padding: 0.5rem;
+      background: var(--bg);
+      border-radius: 6px;
+    }
+
+    .card-tools strong {
+      color: var(--text);
     }
 
     .card-meta {
@@ -664,7 +682,7 @@
           </div>
           <h3>Agent Registry</h3>
           <p>Publish and discover AI agents. Connect with other agents using the A2A protocol for seamless collaboration.</p>
-          <span class="feature-status partial">In Progress</span>
+          <span class="feature-status done">Live</span>
         </div>
       </div>
     </div>
@@ -725,7 +743,7 @@
   <script>
     // Use relative paths - works both locally and on GitHub Pages
     const SKILLS_URL = './skills.json';
-    const AGENTS_URL = './registry.json';
+    const AGENTS_URL = './agents.json';
 
     let skills = [];
     let agents = [];
@@ -780,11 +798,14 @@
 
       const html = filtered.map(item => {
         const name = item.nick || item.name || 'Unknown';
-        const desc = item.description || 'A composable skill for AI agents';
+        const desc = item.description || (currentTab === 'agents' ? 'A custom Claude Code agent' : 'A composable skill for AI agents');
         const repo = item.repository || '';
         const repoShort = repo.replace('https://github.com/', '').replace('.git', '');
         const category = item.category || '';
-        const source = item.source || 'community';
+        const source = item.source || '';
+        const tools = item.tools || '';
+        const model = item.model || '';
+        const installCmd = currentTab === 'agents' ? 'aam agents' : 'aam skills';
 
         return `
           <div class="card">
@@ -792,10 +813,12 @@
               <div class="card-title">${escapeHtml(name)}</div>
               <div class="card-badges">
                 ${category ? `<div class="card-badge category">${escapeHtml(category)}</div>` : ''}
-                <div class="card-badge source-${source}">${source}</div>
+                ${source ? `<div class="card-badge source-${source}">${source}</div>` : ''}
+                ${model ? `<div class="card-badge model">${model}</div>` : ''}
               </div>
             </div>
             <div class="card-description">${escapeHtml(desc)}</div>
+            ${tools ? `<div class="card-tools"><strong>Tools:</strong> ${escapeHtml(tools)}</div>` : ''}
             <div class="card-meta">
               ${item.stars ? `<span class="card-stars">
                 <svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
@@ -810,7 +833,7 @@
             </div>
             ${repoShort ? `
             <div class="card-install">
-              <code>aam skills ${escapeHtml(repoShort)}</code>
+              <code>${installCmd} ${escapeHtml(repoShort)}</code>
             </div>
             ` : ''}
           </div>
