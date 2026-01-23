@@ -16,11 +16,15 @@ import {
   addFromRepo,
   listInstalled,
   removeInstalled,
+  updateSkill,
+  updateAllSkills,
   fetchRemoteRegistry,
   getSkillsDir,
   addAgentFromRepo,
   listInstalledAgents,
   removeInstalledAgent,
+  updateAgent,
+  updateAllAgents,
   getAgentsDir
 } from '../lib/index.js';
 import { startWizard } from '../lib/wizard.js';
@@ -44,8 +48,8 @@ Skill Commands:
   skill[s] -g <owner/repo>         Install a skill globally
   skill[s] list                    List local installed skills
   skill[s] list -g                 List global installed skills
+  skill[s] update [name]           Update all or specific skill
   skill[s] remove <name>           Remove a local skill
-  skill[s] remove -g <name>        Remove a global skill
   skill[s] search                  Browse available skills from registry
 
 Agent Commands:
@@ -53,8 +57,8 @@ Agent Commands:
   agent[s] -g <owner/repo>         Install an agent globally
   agent[s] list                    List local installed agents
   agent[s] list -g                 List global installed agents
+  agent[s] update [name]           Update all or specific agent
   agent[s] remove <name>           Remove a local agent
-  agent[s] remove -g <name>        Remove a global agent
   agent[s] search                  Browse available agents from registry
 
 A2A Commands:
@@ -177,6 +181,44 @@ function handleSkillCommand(subcommand, args) {
       } else {
         console.error('Error:', removeResult.error);
         process.exit(1);
+      }
+      break;
+
+    case 'update':
+    case 'upgrade':
+      const updateArg = args[0];
+      const isGlobalUpdate = argv.g || argv.global;
+
+      if (updateArg) {
+        // Update specific skill
+        console.log(`Checking for updates to ${updateArg}...`);
+        updateSkill(updateArg, { global: isGlobalUpdate }).then(result => {
+          if (result.success) {
+            if (result.updated) {
+              console.log(`✓ Updated "${updateArg}" (${result.from} → ${result.to})`);
+            } else {
+              console.log(`✓ "${updateArg}" is already up to date`);
+            }
+          } else {
+            console.error('Error:', result.error);
+            process.exit(1);
+          }
+        });
+      } else {
+        // Update all skills
+        console.log(`Checking for updates to all ${isGlobalUpdate ? 'global' : 'local'} skills...`);
+        updateAllSkills({ global: isGlobalUpdate }).then(result => {
+          if (result.success) {
+            const { updated, upToDate, failed, total } = result.summary;
+            console.log(`\n${total} skills checked:`);
+            if (updated > 0) console.log(`  ✓ ${updated} updated`);
+            if (upToDate > 0) console.log(`  ✓ ${upToDate} already up to date`);
+            if (failed > 0) console.log(`  ✗ ${failed} failed`);
+          } else {
+            console.error('Error:', result.error);
+            process.exit(1);
+          }
+        });
       }
       break;
 
@@ -309,6 +351,44 @@ function handleAgentCommand(subcommand, args) {
       } else {
         console.error('Error:', removeResult.error);
         process.exit(1);
+      }
+      break;
+
+    case 'update':
+    case 'upgrade':
+      const updateAgentArg = args[0];
+      const isGlobalAgentUpdate = argv.g || argv.global;
+
+      if (updateAgentArg) {
+        // Update specific agent
+        console.log(`Checking for updates to ${updateAgentArg}...`);
+        updateAgent(updateAgentArg, { global: isGlobalAgentUpdate }).then(result => {
+          if (result.success) {
+            if (result.updated) {
+              console.log(`✓ Updated "${updateAgentArg}" (${result.from} → ${result.to})`);
+            } else {
+              console.log(`✓ "${updateAgentArg}" is already up to date`);
+            }
+          } else {
+            console.error('Error:', result.error);
+            process.exit(1);
+          }
+        });
+      } else {
+        // Update all agents
+        console.log(`Checking for updates to all ${isGlobalAgentUpdate ? 'global' : 'local'} agents...`);
+        updateAllAgents({ global: isGlobalAgentUpdate }).then(result => {
+          if (result.success) {
+            const { updated, upToDate, failed, total } = result.summary;
+            console.log(`\n${total} agents checked:`);
+            if (updated > 0) console.log(`  ✓ ${updated} updated`);
+            if (upToDate > 0) console.log(`  ✓ ${upToDate} already up to date`);
+            if (failed > 0) console.log(`  ✗ ${failed} failed`);
+          } else {
+            console.error('Error:', result.error);
+            process.exit(1);
+          }
+        });
       }
       break;
 
