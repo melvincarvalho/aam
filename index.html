@@ -542,6 +542,9 @@
       margin-top: 1rem;
       padding-top: 1rem;
       border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .card-install code {
@@ -551,8 +554,33 @@
       border-radius: 8px;
       font-size: 0.8125rem;
       color: var(--green);
-      display: block;
+      flex: 1;
       font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .copy-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--text-dim);
+      opacity: 0.5;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .copy-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .copy-icon.copied {
+      color: var(--green);
+      opacity: 1;
     }
 
     /* Footer */
@@ -833,6 +861,9 @@
           ${repoShort ? `
           <div class="card-install">
             <code>${installCmd} ${escapeHtml(repoShort)}</code>
+            <button class="copy-icon" onclick="copyToClipboard('${installCmd} ${escapeHtml(repoShort)}', this)" title="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
           </div>
           ` : ''}
         </div>
@@ -888,6 +919,12 @@
       const btn = document.querySelector('.copy-btn');
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy', 2000);
+    }
+
+    function copyToClipboard(text, btn) {
+      navigator.clipboard.writeText(text);
+      btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 2000);
     }
 
     // Search listeners
