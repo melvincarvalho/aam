@@ -567,8 +567,9 @@
   </footer>
 
   <script>
-    const SKILLS_URL = 'https://raw.githubusercontent.com/melvincarvalho/aam/gh-pages/skills.json';
-    const AGENTS_URL = 'https://raw.githubusercontent.com/melvincarvalho/aam/gh-pages/registry.json';
+    // Use relative paths - works both locally and on GitHub Pages
+    const SKILLS_URL = './skills.json';
+    const AGENTS_URL = './registry.json';
 
     let skills = [];
     let agents = [];
