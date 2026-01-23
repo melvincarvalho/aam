@@ -106,6 +106,45 @@ Examples:
   `);
 }
 
+// Helper to resolve nested skill path (e.g., "anthropics-skills/pdf" -> actual path)
+function resolveNestedSkillPath(skillArg, skillsDir) {
+  let skillPath = skillArg;
+  if (!fs.existsSync(skillArg)) {
+    skillPath = path.join(skillsDir, skillArg);
+
+    // If path doesn't exist and contains a slash, try to find a matching nested skill
+    // e.g., "anthropics-skills/pdf" -> search for "pdf" skill in anthropics-skills
+    if (!fs.existsSync(skillPath) && skillArg.includes('/')) {
+      const [baseName, skillName] = skillArg.split('/');
+      const basePath = path.join(skillsDir, baseName);
+      if (fs.existsSync(basePath) && fs.statSync(basePath).isDirectory()) {
+        // Search for SKILL.md in subdirectories matching skillName
+        const findSkill = (dir, name, depth = 0) => {
+          if (depth > 3) return null;
+          try {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+              if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
+              if (entry.isDirectory()) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.name === name && fs.existsSync(path.join(fullPath, 'SKILL.md'))) {
+                  return fullPath;
+                }
+                const found = findSkill(fullPath, name, depth + 1);
+                if (found) return found;
+              }
+            }
+          } catch {}
+          return null;
+        };
+        const found = findSkill(basePath, skillName);
+        if (found) skillPath = found;
+      }
+    }
+  }
+  return skillPath;
+}
+
 // Function to parse skill arguments
 function parseSkillFromArgs (args) {
   const skill = {
@@ -349,11 +388,7 @@ async function handleSkillCommand(subcommand, args) {
 
       // Find skill path
       const isGlobalSign = argv.g || argv.global;
-      let signSkillPath = signSkillArg;
-      if (!fs.existsSync(signSkillArg)) {
-        const skillsDir = getSkillsDir(isGlobalSign);
-        signSkillPath = path.join(skillsDir, signSkillArg);
-      }
+      const signSkillPath = resolveNestedSkillPath(signSkillArg, getSkillsDir(isGlobalSign));
 
       const signResult = signSkill(signSkillPath, signPrivkey, {
         repo: signRepo,
@@ -382,11 +417,7 @@ async function handleSkillCommand(subcommand, args) {
 
       // Find skill path
       const isGlobalVerify = argv.g || argv.global;
-      let verifySkillPath = verifySkillArg;
-      if (!fs.existsSync(verifySkillArg)) {
-        const skillsDir = getSkillsDir(isGlobalVerify);
-        verifySkillPath = path.join(skillsDir, verifySkillArg);
-      }
+      const verifySkillPath = resolveNestedSkillPath(verifySkillArg, getSkillsDir(isGlobalVerify));
 
       const verifyResult = verifySkill(verifySkillPath, {
         expectedPubkey: argv.pubkey
