@@ -40,22 +40,22 @@ Agent-to-Agent Manager (AAM) - A utility for working with A2A protocol agents
 Usage: aam <command> [options]
 
 Skill Commands:
-  skills <owner/repo>        Install a skill (local by default)
-  skills -g <owner/repo>     Install a skill globally
-  skills list                List local installed skills
-  skills list -g             List global installed skills
-  skills remove <name>       Remove a local skill
-  skills remove -g <name>    Remove a global skill
-  skills search              Browse available skills from registry
+  skill[s] <owner/repo>[@version]  Install a skill (local by default)
+  skill[s] -g <owner/repo>         Install a skill globally
+  skill[s] list                    List local installed skills
+  skill[s] list -g                 List global installed skills
+  skill[s] remove <name>           Remove a local skill
+  skill[s] remove -g <name>        Remove a global skill
+  skill[s] search                  Browse available skills from registry
 
 Agent Commands:
-  agents <owner/repo>        Install an agent (local by default)
-  agents -g <owner/repo>     Install an agent globally
-  agents list                List local installed agents
-  agents list -g             List global installed agents
-  agents remove <name>       Remove a local agent
-  agents remove -g <name>    Remove a global agent
-  agents search              Browse available agents from registry
+  agent[s] <owner/repo>[@version]  Install an agent (local by default)
+  agent[s] -g <owner/repo>         Install an agent globally
+  agent[s] list                    List local installed agents
+  agent[s] list -g                 List global installed agents
+  agent[s] remove <name>           Remove a local agent
+  agent[s] remove -g <name>        Remove a global agent
+  agent[s] search                  Browse available agents from registry
 
 A2A Commands:
   init                      Initialize agent card in .well-known/agent.json
@@ -72,10 +72,11 @@ Options:
   --full                    Clone full repo instead of just SKILL.md
 
 Examples:
-  aam skills anthropics/skills                # Install to ./.claude/skills/
-  aam skills -g anthropics/skills             # Install to ~/.claude/skills/
-  aam agents user/code-reviewer               # Install to ./.claude/agents/
-  aam agents -g user/code-reviewer            # Install to ~/.claude/agents/
+  aam skill anthropics/skills                 # Install to ./.claude/skills/
+  aam skill anthropics/skills@v1.0.0          # Install specific version
+  aam skill -g anthropics/skills              # Install to ~/.claude/skills/
+  aam agent user/code-reviewer                # Install to ./.claude/agents/
+  aam agent -g user/code-reviewer             # Install to ~/.claude/agents/
   `);
 }
 
@@ -367,10 +368,12 @@ function handleAgentCommand(subcommand, args) {
 const command = argv._[0];
 
 switch (command) {
+  case 'skill':
   case 'skills':
     handleSkillCommand(argv._[1], argv._.slice(2));
     break;
 
+  case 'agent':
   case 'agents':
     handleAgentCommand(argv._[1], argv._.slice(2));
     break;
