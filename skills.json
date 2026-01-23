@@ -5,7 +5,8 @@
     "description": "Create, edit, and analyze Word documents with tracked changes support",
     "repository": "https://github.com/anthropics/skills",
     "category": "documents",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "pdf",
@@ -13,7 +14,8 @@
     "description": "PDF manipulation including text extraction, merging, splitting, and form handling",
     "repository": "https://github.com/anthropics/skills",
     "category": "documents",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "pptx",
@@ -21,7 +23,8 @@
     "description": "Create presentations with layouts, templates, and automated slide generation",
     "repository": "https://github.com/anthropics/skills",
     "category": "documents",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "xlsx",
@@ -29,7 +32,8 @@
     "description": "Spreadsheet operations with formulas, formatting, and data analysis",
     "repository": "https://github.com/anthropics/skills",
     "category": "documents",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "frontend-design",
@@ -37,7 +41,8 @@
     "description": "React and Tailwind CSS design guidance for production-grade interfaces",
     "repository": "https://github.com/anthropics/skills",
     "category": "development",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "mcp-builder",
@@ -45,7 +50,8 @@
     "description": "Create Model Context Protocol servers for external API integration",
     "repository": "https://github.com/anthropics/skills",
     "category": "development",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "webapp-testing",
@@ -53,7 +59,8 @@
     "description": "Web application testing using Playwright with comprehensive coverage",
     "repository": "https://github.com/anthropics/skills",
     "category": "testing",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "skill-creator",
@@ -61,7 +68,8 @@
     "description": "Interactive guided tool for creating new agent skills",
     "repository": "https://github.com/anthropics/skills",
     "category": "tools",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "algorithmic-art",
@@ -69,7 +77,8 @@
     "description": "Generative art using p5.js with seeded randomness and particle systems",
     "repository": "https://github.com/anthropics/skills",
     "category": "creative",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "canvas-design",
@@ -77,7 +86,8 @@
     "description": "Visual art and poster creation in PNG and PDF formats",
     "repository": "https://github.com/anthropics/skills",
     "category": "creative",
-    "source": "anthropic"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "artifacts-builder",
@@ -85,31 +95,8 @@
     "description": "Complex HTML artifact construction with React and shadcn/ui components",
     "repository": "https://github.com/anthropics/skills",
     "category": "development",
-    "source": "anthropic"
-  },
-  {
-    "nick": "react-best-practices",
-    "name": "React Best Practices",
-    "description": "Production-ready React patterns, hooks, and component architecture",
-    "repository": "https://github.com/vercel-labs/agent-skills",
-    "category": "development",
-    "source": "vercel"
-  },
-  {
-    "nick": "web-design-guidelines",
-    "name": "Web Design Guidelines",
-    "description": "Modern web design principles, accessibility, and responsive patterns",
-    "repository": "https://github.com/vercel-labs/agent-skills",
-    "category": "design",
-    "source": "vercel"
-  },
-  {
-    "nick": "nextjs-patterns",
-    "name": "Next.js Patterns",
-    "description": "Next.js App Router, Server Components, and deployment best practices",
-    "repository": "https://github.com/vercel-labs/agent-skills",
-    "category": "development",
-    "source": "vercel"
+    "source": "anthropic",
+    "stars": 50026
   },
   {
     "nick": "superpowers",
@@ -117,39 +104,35 @@
     "description": "20+ battle-tested skills including TDD, debugging, and collaboration patterns",
     "repository": "https://github.com/obra/superpowers",
     "category": "development",
-    "source": "community"
+    "source": "community",
+    "stars": 33779
   },
   {
-    "nick": "playwright-skill",
-    "name": "Playwright Automation",
-    "description": "Browser automation, testing, and scraping using Playwright",
-    "repository": "https://github.com/lackeyjb/playwright-skill",
-    "category": "testing",
-    "source": "community"
+    "nick": "react-best-practices",
+    "name": "React Best Practices",
+    "description": "Production-ready React patterns, hooks, and component architecture",
+    "repository": "https://github.com/vercel-labs/agent-skills",
+    "category": "development",
+    "source": "vercel",
+    "stars": 15571
   },
   {
-    "nick": "d3js-visualization",
-    "name": "D3.js Visualization",
-    "description": "Interactive data visualizations with D3.js charts and graphs",
-    "repository": "https://github.com/chrisvoncsefalvay/claude-d3js-skill",
-    "category": "creative",
-    "source": "community"
-  },
-  {
-    "nick": "ios-simulator",
-    "name": "iOS Simulator",
-    "description": "iOS app building, testing, and simulator automation",
-    "repository": "https://github.com/conorluddy/ios-simulator-skill",
-    "category": "mobile",
-    "source": "community"
-  },
-  {
-    "nick": "web-asset-generator",
-    "name": "Web Asset Generator",
-    "description": "Favicon, app icon, and social media image generation",
-    "repository": "https://github.com/alonw0/web-asset-generator",
+    "nick": "web-design-guidelines",
+    "name": "Web Design Guidelines",
+    "description": "Modern web design principles, accessibility, and responsive patterns",
+    "repository": "https://github.com/vercel-labs/agent-skills",
     "category": "design",
-    "source": "community"
+    "source": "vercel",
+    "stars": 15571
+  },
+  {
+    "nick": "nextjs-patterns",
+    "name": "Next.js Patterns",
+    "description": "Next.js App Router, Server Components, and deployment best practices",
+    "repository": "https://github.com/vercel-labs/agent-skills",
+    "category": "development",
+    "source": "vercel",
+    "stars": 15571
   },
   {
     "nick": "scientific-skills",
@@ -157,7 +140,8 @@
     "description": "Scientific libraries, data analysis, and database integration",
     "repository": "https://github.com/K-Dense-AI/claude-scientific-skills",
     "category": "data",
-    "source": "community"
+    "source": "community",
+    "stars": 6883
   },
   {
     "nick": "security-analysis",
@@ -165,23 +149,8 @@
     "description": "Static analysis, vulnerability detection, and security best practices",
     "repository": "https://github.com/trailofbits/skills",
     "category": "security",
-    "source": "community"
-  },
-  {
-    "nick": "ffuf-fuzzing",
-    "name": "Web Fuzzing",
-    "description": "Web fuzzing guidance for penetration testing with ffuf",
-    "repository": "https://github.com/jthack/ffuf_claude_skill",
-    "category": "security",
-    "source": "community"
-  },
-  {
-    "nick": "loki-mode",
-    "name": "Loki Mode",
-    "description": "Multi-agent startup orchestrator taking PRDs to deployed products",
-    "repository": "https://github.com/asklokesh/claudeskill-loki-mode",
-    "category": "agents",
-    "source": "community"
+    "source": "community",
+    "stars": 1777
   },
   {
     "nick": "tdd",
@@ -189,7 +158,8 @@
     "description": "RED-GREEN-REFACTOR cycle with comprehensive test coverage",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "development",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "systematic-debugging",
@@ -197,7 +167,8 @@
     "description": "Methodical debugging with hypothesis testing and root cause analysis",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "development",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "clean-code",
@@ -205,7 +176,8 @@
     "description": "SOLID principles, refactoring patterns, and code quality standards",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "development",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "api-design",
@@ -213,7 +185,8 @@
     "description": "RESTful API patterns, OpenAPI specs, and versioning strategies",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "development",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "database-design",
@@ -221,7 +194,8 @@
     "description": "Schema design, migrations, indexing, and query optimization",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "development",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "docker-expert",
@@ -229,7 +203,8 @@
     "description": "Multi-stage builds, container optimization, and orchestration",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "infrastructure",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "git-workflows",
@@ -237,7 +212,8 @@
     "description": "Conventional commits, branching strategies, and CI/CD integration",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "infrastructure",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "linux-shell",
@@ -245,7 +221,8 @@
     "description": "Bash automation, system administration, and CLI tools",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "infrastructure",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "stripe-integration",
@@ -253,7 +230,8 @@
     "description": "Payment processing, subscriptions, and checkout flows",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "integrations",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "supabase",
@@ -261,7 +239,8 @@
     "description": "PostgreSQL, authentication, storage, and realtime subscriptions",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "integrations",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "firebase",
@@ -269,7 +248,8 @@
     "description": "Firestore, authentication, cloud functions, and hosting",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "integrations",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "aws-serverless",
@@ -277,7 +257,8 @@
     "description": "Lambda, API Gateway, DynamoDB, and SAM/CDK deployment",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "integrations",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "discord-bot",
@@ -285,7 +266,8 @@
     "description": "Discord.js bots with slash commands and event handling",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "integrations",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "telegram-bot",
@@ -293,7 +275,8 @@
     "description": "Telegram bot development with inline keyboards and webhooks",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "integrations",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "rag-engineer",
@@ -301,7 +284,8 @@
     "description": "Retrieval-augmented generation with embeddings and vector stores",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "ai",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "prompt-engineer",
@@ -309,7 +293,8 @@
     "description": "Prompt design, chain-of-thought, and few-shot learning patterns",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "ai",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "langchain",
@@ -317,7 +302,8 @@
     "description": "LLM chains, agents, memory, and tool integration",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "ai",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "langgraph",
@@ -325,7 +311,8 @@
     "description": "Stateful multi-actor AI applications with cycles and persistence",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "ai",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "crewai",
@@ -333,7 +320,8 @@
     "description": "Multi-agent orchestration with roles, goals, and task delegation",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "ai",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "seo-audit",
@@ -341,7 +329,8 @@
     "description": "Technical SEO analysis, keyword research, and optimization",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "marketing",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "copywriting",
@@ -349,7 +338,8 @@
     "description": "Persuasive copy, headlines, CTAs, and conversion optimization",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "marketing",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "email-sequences",
@@ -357,7 +347,8 @@
     "description": "Drip campaigns, nurture flows, and email automation",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "marketing",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "micro-saas",
@@ -365,7 +356,8 @@
     "description": "Build and launch small SaaS products from idea to deployment",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "maker",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
   },
   {
     "nick": "browser-extension",
@@ -373,7 +365,17 @@
     "description": "Chrome/Firefox extension development with manifest v3",
     "repository": "https://github.com/sickn33/antigravity-awesome-skills",
     "category": "maker",
-    "source": "community"
+    "source": "community",
+    "stars": 1626
+  },
+  {
+    "nick": "playwright-skill",
+    "name": "Playwright Automation",
+    "description": "Browser automation, testing, and scraping using Playwright",
+    "repository": "https://github.com/lackeyjb/playwright-skill",
+    "category": "testing",
+    "source": "community",
+    "stars": 1409
   },
   {
     "nick": "expo-native",
@@ -381,15 +383,17 @@
     "description": "React Native development with Expo for iOS and Android",
     "repository": "https://github.com/expo/skills",
     "category": "mobile",
-    "source": "expo"
+    "source": "expo",
+    "stars": 595
   },
   {
-    "nick": "better-auth",
-    "name": "Better Auth",
-    "description": "Authentication best practices with OAuth, JWT, and session management",
-    "repository": "https://github.com/better-auth/skills",
-    "category": "security",
-    "source": "community"
+    "nick": "loki-mode",
+    "name": "Loki Mode",
+    "description": "Multi-agent startup orchestrator taking PRDs to deployed products",
+    "repository": "https://github.com/asklokesh/claudeskill-loki-mode",
+    "category": "agents",
+    "source": "community",
+    "stars": 536
   },
   {
     "nick": "remotion",
@@ -397,6 +401,52 @@
     "description": "Programmatic video creation with React and Remotion",
     "repository": "https://github.com/remotion-dev/skills",
     "category": "creative",
-    "source": "remotion"
+    "source": "remotion",
+    "stars": 473
+  },
+  {
+    "nick": "ios-simulator",
+    "name": "iOS Simulator",
+    "description": "iOS app building, testing, and simulator automation",
+    "repository": "https://github.com/conorluddy/ios-simulator-skill",
+    "category": "mobile",
+    "source": "community",
+    "stars": 367
+  },
+  {
+    "nick": "web-asset-generator",
+    "name": "Web Asset Generator",
+    "description": "Favicon, app icon, and social media image generation",
+    "repository": "https://github.com/alonw0/web-asset-generator",
+    "category": "design",
+    "source": "community",
+    "stars": 166
+  },
+  {
+    "nick": "ffuf-fuzzing",
+    "name": "Web Fuzzing",
+    "description": "Web fuzzing guidance for penetration testing with ffuf",
+    "repository": "https://github.com/jthack/ffuf_claude_skill",
+    "category": "security",
+    "source": "community",
+    "stars": 100
+  },
+  {
+    "nick": "better-auth",
+    "name": "Better Auth",
+    "description": "Authentication best practices with OAuth, JWT, and session management",
+    "repository": "https://github.com/better-auth/skills",
+    "category": "security",
+    "source": "community",
+    "stars": 78
+  },
+  {
+    "nick": "d3js-visualization",
+    "name": "D3.js Visualization",
+    "description": "Interactive data visualizations with D3.js charts and graphs",
+    "repository": "https://github.com/chrisvoncsefalvay/claude-d3js-skill",
+    "category": "creative",
+    "source": "community",
+    "stars": 76
   }
 ]
