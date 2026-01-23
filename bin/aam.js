@@ -19,6 +19,7 @@ import {
   updateSkill,
   updateAllSkills,
   fetchRemoteRegistry,
+  searchRemote,
   getSkillsDir,
   addAgentFromRepo,
   listInstalledAgents,
@@ -50,7 +51,7 @@ Usage: aam <command> [options]
 
 Skill Commands:
   skill[s] <owner/repo>[@version]  Install a skill (local by default)
-  skill[s] list                    List installed skills
+  skill[s] list                    List installed skills (shows ✓/⚠/✗ signature status)
   skill[s] update [name]           Update all or specific skill
   skill[s] remove <name>           Remove an installed skill
   skill[s] sign <name>             Sign a skill (kind 31337 Nostr event)
@@ -59,12 +60,15 @@ Skill Commands:
 
 Agent Commands:
   agent[s] <owner/repo>[@version]  Install an agent (local by default)
-  agent[s] list                    List installed agents
+  agent[s] list                    List installed agents (shows ✓/⚠/✗ signature status)
   agent[s] update [name]           Update all or specific agent
   agent[s] remove <name>           Remove an installed agent
   agent[s] sign <name>             Sign an agent (kind 31337 Nostr event)
   agent[s] verify <name>           Verify an agent signature
   agent[s] search                  Browse available agents from registry
+
+Search:
+  search <query>              Search both skills and agents in registries
 
 A2A Commands:
   init                      Initialize agent card in .well-known/agent.json
@@ -77,15 +81,23 @@ Other Commands:
 
 Options:
   -g, --global              Use global directory (~/.claude/skills/)
-  --force                   Overwrite existing skill
-  --full                    Clone full repo instead of just SKILL.md
+  --force                   Overwrite existing skill/agent
+  --full                    Clone full repo instead of just SKILL.md/agent.md
+  --verify                  Verify signature after install
+
+Signature Legend:
+  ✓  Verified signature
+  ⚠  Unsigned (no signature)
+  ✗  Invalid signature
 
 Examples:
   aam skill anthropics/skills                 # Install to ./.claude/skills/
   aam skill anthropics/skills@v1.0.0          # Install specific version
+  aam skill anthropics/skills --verify        # Install and verify signature
   aam skill -g anthropics/skills              # Install to ~/.claude/skills/
   aam agent user/code-reviewer                # Install to ./.claude/agents/
   aam agent -g user/code-reviewer             # Install to ~/.claude/agents/
+  aam search git                              # Search for skills/agents matching "git"
   `);
 }
 
@@ -118,6 +130,7 @@ function handleSkillCommand(subcommand, args) {
   if (subcommand && (subcommand.includes('/') || subcommand.startsWith('http'))) {
     const repoArg = subcommand;
     const isGlobal = argv.g || argv.global;
+    const shouldVerify = argv.verify;
     console.log(`Installing skill from ${repoArg}${isGlobal ? ' (global)' : ''}...`);
     addFromRepo(repoArg, { force: argv.force, full: argv.full, global: isGlobal }).then(installResult => {
       if (installResult.success) {
@@ -128,6 +141,20 @@ function handleSkillCommand(subcommand, args) {
         }
         if (installResult.skill.installMode) {
           console.log(`  Mode: ${installResult.skill.installMode}`);
+        }
+
+        // Verify signature if requested
+        if (shouldVerify) {
+          console.log(`\nVerifying signature...`);
+          const verifyResult = verifySkill(installResult.path, {});
+          if (verifyResult.success && verifyResult.verified) {
+            console.log(`✓ Signature verified`);
+            console.log(`  Signed by: ${verifyResult.pubkey}`);
+          } else if (verifyResult.unsigned) {
+            console.log(`⚠ No signature found (unsigned)`);
+          } else {
+            console.log(`✗ Verification failed: ${verifyResult.error}`);
+          }
         }
       } else {
         console.error('Error:', installResult.error);
@@ -151,16 +178,29 @@ function handleSkillCommand(subcommand, args) {
         } else {
           console.log(`${scopeLabel} skills (${listResult.skills.length}):\n`);
           listResult.skills.forEach(skill => {
-            console.log(`  ${skill.name}${skill.version ? ` v${skill.version}` : ''}`);
+            // Signature status indicator
+            let sigIcon = '';
+            if (skill.signatureStatus === 'verified') {
+              sigIcon = '✓ ';
+            } else if (skill.signatureStatus === 'unsigned') {
+              sigIcon = '⚠ ';
+            } else if (skill.signatureStatus === 'invalid') {
+              sigIcon = '✗ ';
+            }
+            console.log(`  ${sigIcon}${skill.name}${skill.version ? ` v${skill.version}` : ''}`);
             if (skill.description) {
               console.log(`    ${skill.description}`);
             }
             if (skill.source) {
               console.log(`    Source: ${skill.source}`);
             }
+            if (skill.signedBy) {
+              console.log(`    Signed by: ${skill.signedBy.slice(0, 16)}...`);
+            }
             console.log();
           });
           console.log(`Skills directory: ${listResult.path}`);
+          console.log(`Legend: ✓ verified  ⚠ unsigned  ✗ invalid`);
         }
       } else {
         console.error('Error:', listResult.error);
@@ -366,6 +406,7 @@ function handleAgentCommand(subcommand, args) {
   if (subcommand && (subcommand.includes('/') || subcommand.startsWith('http'))) {
     const repoArg = subcommand;
     const isGlobal = argv.g || argv.global;
+    const shouldVerify = argv.verify;
     console.log(`Installing agent from ${repoArg}${isGlobal ? ' (global)' : ''}...`);
     addAgentFromRepo(repoArg, { force: argv.force, full: argv.full, global: isGlobal }).then(installResult => {
       if (installResult.success) {
@@ -376,6 +417,20 @@ function handleAgentCommand(subcommand, args) {
         }
         if (installResult.agent.installMode) {
           console.log(`  Mode: ${installResult.agent.installMode}`);
+        }
+
+        // Verify signature if requested
+        if (shouldVerify) {
+          console.log(`\nVerifying signature...`);
+          const verifyResult = verifyAgent(installResult.path, {});
+          if (verifyResult.success && verifyResult.verified) {
+            console.log(`✓ Signature verified`);
+            console.log(`  Signed by: ${verifyResult.pubkey}`);
+          } else if (verifyResult.unsigned) {
+            console.log(`⚠ No signature found (unsigned)`);
+          } else {
+            console.log(`✗ Verification failed: ${verifyResult.error}`);
+          }
         }
       } else {
         console.error('Error:', installResult.error);
@@ -388,18 +443,27 @@ function handleAgentCommand(subcommand, args) {
   switch (subcommand) {
     case 'list':
     case 'ls':
-      const isGlobalList = argv.g || argv.global;
-      const listResult = listInstalledAgents({ global: isGlobalList });
+      const isGlobalAgentList = argv.g || argv.global;
+      const listAgentResult = listInstalledAgents({ global: isGlobalAgentList });
 
-      if (listResult.success) {
-        const scopeLabel = isGlobalList ? 'Global' : 'Local';
-        if (listResult.agents.length === 0) {
+      if (listAgentResult.success) {
+        const scopeLabel = isGlobalAgentList ? 'Global' : 'Local';
+        if (listAgentResult.agents.length === 0) {
           console.log(`No ${scopeLabel.toLowerCase()} agents installed.`);
-          console.log(`\nInstall agents with: aam agents${isGlobalList ? ' -g' : ''} <owner/repo>`);
+          console.log(`\nInstall agents with: aam agents${isGlobalAgentList ? ' -g' : ''} <owner/repo>`);
         } else {
-          console.log(`${scopeLabel} agents (${listResult.agents.length}):\n`);
-          listResult.agents.forEach(agent => {
-            console.log(`  ${agent.name}${agent.displayName ? ` (${agent.displayName})` : ''}`);
+          console.log(`${scopeLabel} agents (${listAgentResult.agents.length}):\n`);
+          listAgentResult.agents.forEach(agent => {
+            // Signature status indicator
+            let sigIcon = '';
+            if (agent.signatureStatus === 'verified') {
+              sigIcon = '✓ ';
+            } else if (agent.signatureStatus === 'unsigned') {
+              sigIcon = '⚠ ';
+            } else if (agent.signatureStatus === 'invalid') {
+              sigIcon = '✗ ';
+            }
+            console.log(`  ${sigIcon}${agent.name}${agent.displayName ? ` (${agent.displayName})` : ''}`);
             if (agent.description) {
               console.log(`    ${agent.description}`);
             }
@@ -409,12 +473,16 @@ function handleAgentCommand(subcommand, args) {
             if (agent.model) {
               console.log(`    Model: ${agent.model}`);
             }
+            if (agent.signedBy) {
+              console.log(`    Signed by: ${agent.signedBy.slice(0, 16)}...`);
+            }
             console.log();
           });
-          console.log(`Agents directory: ${listResult.path}`);
+          console.log(`Agents directory: ${listAgentResult.path}`);
+          console.log(`Legend: ✓ verified  ⚠ unsigned  ✗ invalid`);
         }
       } else {
-        console.error('Error:', listResult.error);
+        console.error('Error:', listAgentResult.error);
         process.exit(1);
       }
       break;
@@ -897,6 +965,62 @@ switch (command) {
     } else {
       console.error('Error registering agent:', registerResult.error);
     }
+    break;
+
+  case 'search':
+    const searchQuery = argv._[1];
+
+    if (!searchQuery) {
+      console.error('Error: Search query is required');
+      console.error('Example: aam search git');
+      process.exit(1);
+    }
+
+    console.log(`Searching for "${searchQuery}"...\n`);
+    searchRemote(searchQuery).then(searchResult => {
+      if (searchResult.success) {
+        if (searchResult.total === 0) {
+          console.log('No results found.');
+        } else {
+          // Show skills
+          if (searchResult.results.skills.length > 0) {
+            console.log(`Skills (${searchResult.results.skills.length}):\n`);
+            searchResult.results.skills.forEach(item => {
+              const name = item.nick || item.name || item.id;
+              console.log(`  ${name}`);
+              if (item.description) {
+                console.log(`    ${item.description}`);
+              }
+              if (item.repository) {
+                console.log(`    Install: aam skill ${item.repository}`);
+              }
+              console.log();
+            });
+          }
+
+          // Show agents
+          if (searchResult.results.agents.length > 0) {
+            console.log(`Agents (${searchResult.results.agents.length}):\n`);
+            searchResult.results.agents.forEach(item => {
+              const name = item.nick || item.name || item.id;
+              console.log(`  ${name}`);
+              if (item.description) {
+                console.log(`    ${item.description}`);
+              }
+              if (item.repository) {
+                console.log(`    Install: aam agent ${item.repository}`);
+              }
+              console.log();
+            });
+          }
+
+          console.log(`Found ${searchResult.total} result(s)`);
+        }
+      } else {
+        console.error('Error:', searchResult.error);
+        process.exit(1);
+      }
+    });
     break;
 
   case 'help':
