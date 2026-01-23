@@ -448,5 +448,23 @@
     "category": "creative",
     "source": "community",
     "stars": 76
+  },
+  {
+    "nick": "pirate",
+    "name": "Pirate Voice",
+    "description": "Respond as a grizzled sea pirate. Simple voice/style skill for fun responses.",
+    "repository": "https://github.com/aam-skills/pirate",
+    "category": "voice",
+    "source": "community",
+    "stars": 0
+  },
+  {
+    "nick": "haiku",
+    "name": "Haiku Response",
+    "description": "Respond in haiku format (5-7-5 syllables). Poetic answers to any question.",
+    "repository": "https://github.com/aam-skills/haiku",
+    "category": "voice",
+    "source": "community",
+    "stars": 0
   }
 ]
