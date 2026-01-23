@@ -4,6 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import minimist from 'minimist';
 import {
   createAgentCard,
@@ -297,17 +298,24 @@ function handleSkillCommand(subcommand, args) {
 
     case 'sign':
       const signSkillArg = args[0];
-      const signPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
+      let signPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
+
+      // Try git config if no privkey provided
+      if (!signPrivkey) {
+        try {
+          signPrivkey = execSync('git config nostr.privkey', { encoding: 'utf8' }).trim();
+        } catch {}
+      }
 
       if (!signSkillArg) {
         console.error('Error: Skill name or path required');
-        console.error('Example: aam skill sign my-skill --privkey <hex>');
+        console.error('Example: aam skill sign my-skill --repo owner/repo');
         process.exit(1);
       }
 
       if (!signPrivkey) {
         console.error('Error: Private key required');
-        console.error('Use --privkey <hex> or set AAM_PRIVKEY environment variable');
+        console.error('Use --privkey <hex>, set AAM_PRIVKEY, or run: npm init agent');
         process.exit(1);
       }
 
@@ -576,17 +584,24 @@ function handleAgentCommand(subcommand, args) {
 
     case 'sign':
       const signAgentArg = args[0];
-      const signAgentPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
+      let signAgentPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
+
+      // Try git config if no privkey provided
+      if (!signAgentPrivkey) {
+        try {
+          signAgentPrivkey = execSync('git config nostr.privkey', { encoding: 'utf8' }).trim();
+        } catch {}
+      }
 
       if (!signAgentArg) {
         console.error('Error: Agent name or path required');
-        console.error('Example: aam agent sign my-agent --privkey <hex>');
+        console.error('Example: aam agent sign my-agent --repo owner/repo');
         process.exit(1);
       }
 
       if (!signAgentPrivkey) {
         console.error('Error: Private key required');
-        console.error('Use --privkey <hex> or set AAM_PRIVKEY environment variable');
+        console.error('Use --privkey <hex>, set AAM_PRIVKEY, or run: npm init agent');
         process.exit(1);
       }
 
