@@ -744,6 +744,12 @@ async function handleAgentCommand(subcommand, args) {
 // MAIN
 const command = argv._[0];
 
+// Handle --help or -h flag - show help and exit
+if (argv.help || argv.h) {
+  displayHelp();
+  process.exit(0);
+}
+
 switch (command) {
   case 'skill':
   case 'skills':
