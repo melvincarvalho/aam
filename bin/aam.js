@@ -52,11 +52,11 @@ Other Commands:
   help                      Display this help information
 
 Examples:
-  aam skill anthropics/skills                # Install skill from GitHub
-  aam skill https://github.com/user/repo     # Install from full URL
-  aam skill list                             # Show installed skills
-  aam skill remove my-skill                  # Uninstall a skill
-  aam skill search                           # Browse available skills
+  aam skills anthropics/skills                # Install skill from GitHub
+  aam skills https://github.com/user/repo     # Install from full URL
+  aam skills list                             # Show installed skills
+  aam skills remove my-skill                  # Uninstall a skill
+  aam skills search                           # Browse available skills
 
   aam init
   aam wizard
@@ -120,7 +120,7 @@ function handleSkillCommand(subcommand, args) {
       if (listResult.success) {
         if (listResult.skills.length === 0) {
           console.log('No skills installed.');
-          console.log('\nInstall skills with: aam skill <owner/repo>');
+          console.log('\nInstall skills with: aam skills <owner/repo>');
         } else {
           console.log(`Installed skills (${listResult.skills.length}):\n`);
           listResult.skills.forEach(skill => {
@@ -147,7 +147,7 @@ function handleSkillCommand(subcommand, args) {
 
       if (!removeArg) {
         console.error('Error: Skill name is required');
-        console.error('Example: aam skill remove skill-git');
+        console.error('Example: aam skills remove skill-git');
         process.exit(1);
       }
 
@@ -181,7 +181,7 @@ function handleSkillCommand(subcommand, args) {
             console.log();
           });
 
-          console.log(`Install with: aam skill <repository>`);
+          console.log(`Install with: aam skills <repository>`);
         } else {
           console.error('Error:', remoteResult.error);
           process.exit(1);
@@ -190,18 +190,18 @@ function handleSkillCommand(subcommand, args) {
       break;
 
     default:
-      console.log('Usage: aam skill <command>');
+      console.log('Usage: aam skills <command>');
       console.log('');
       console.log('Commands:');
-      console.log('  aam skill <owner/repo>    Install a skill from GitHub');
-      console.log('  aam skill list            List installed skills');
-      console.log('  aam skill remove <name>   Remove an installed skill');
-      console.log('  aam skill search          Browse available skills');
+      console.log('  aam skills <owner/repo>    Install a skill from GitHub');
+      console.log('  aam skills list            List installed skills');
+      console.log('  aam skills remove <name>   Remove an installed skill');
+      console.log('  aam skills search          Browse available skills');
       console.log('');
       console.log('Examples:');
-      console.log('  aam skill anthropics/skills');
-      console.log('  aam skill list');
-      console.log('  aam skill remove my-skill');
+      console.log('  aam skills anthropics/skills');
+      console.log('  aam skills list');
+      console.log('  aam skills remove my-skill');
       break;
   }
 }
@@ -210,7 +210,7 @@ function handleSkillCommand(subcommand, args) {
 const command = argv._[0];
 
 switch (command) {
-  case 'skill':
+  case 'skills':
     handleSkillCommand(argv._[1], argv._.slice(2));
     break;
 
@@ -220,11 +220,11 @@ switch (command) {
 
     if (!repoArg) {
       console.error('Error: Repository is required');
-      console.error('Example: aam skill <owner/repo>');
+      console.error('Example: aam skills <owner/repo>');
       process.exit(1);
     }
 
-    console.log('Note: Use "aam skill <repo>" instead');
+    console.log('Note: Use "aam skills <repo>" instead');
     console.log(`Installing skill from ${repoArg}...`);
     addFromRepo(repoArg, { force: argv.force, full: argv.full }).then(installResult => {
       if (installResult.success) {
@@ -241,18 +241,18 @@ switch (command) {
     break;
 
   case 'list':
-    console.log('Note: Use "aam skill list" instead');
+    console.log('Note: Use "aam skills list" instead');
     handleSkillCommand('list', []);
     break;
 
   case 'remove':
-    console.log('Note: Use "aam skill remove" instead');
+    console.log('Note: Use "aam skills remove" instead');
     handleSkillCommand('remove', argv._.slice(1));
     break;
 
   case 'remote':
     const remoteType = argv._[1] || 'skills';
-    console.log(`Note: Use "aam skill search" or "aam agent search" instead`);
+    console.log(`Note: Use "aam skills search" or "aam agent search" instead`);
 
     console.log(`Fetching ${remoteType} from remote registry...`);
     fetchRemoteRegistry(remoteType).then(remoteResult => {
@@ -272,7 +272,7 @@ switch (command) {
           console.log();
         });
 
-        console.log(`Install with: aam skill <repository>`);
+        console.log(`Install with: aam skills <repository>`);
       } else {
         console.error('Error:', remoteResult.error);
         process.exit(1);
