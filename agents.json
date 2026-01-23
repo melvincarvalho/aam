@@ -6,7 +6,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "development",
     "tools": "Read, Grep, Glob, Bash",
-    "model": "inherit"
+    "model": "inherit",
+    "stars": 50118
   },
   {
     "nick": "debugger",
@@ -15,7 +16,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "development",
     "tools": "Read, Edit, Bash, Grep, Glob",
-    "model": "inherit"
+    "model": "inherit",
+    "stars": 50118
   },
   {
     "nick": "security-auditor",
@@ -24,7 +26,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "security",
     "tools": "Read, Grep, Glob, Bash",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 50118
   },
   {
     "nick": "test-writer",
@@ -33,7 +36,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "testing",
     "tools": "Read, Write, Edit, Bash, Grep, Glob",
-    "model": "inherit"
+    "model": "inherit",
+    "stars": 50118
   },
   {
     "nick": "refactorer",
@@ -42,7 +46,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "development",
     "tools": "Read, Edit, Grep, Glob",
-    "model": "inherit"
+    "model": "inherit",
+    "stars": 50118
   },
   {
     "nick": "doc-writer",
@@ -51,7 +56,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "documentation",
     "tools": "Read, Write, Grep, Glob",
-    "model": "haiku"
+    "model": "haiku",
+    "stars": 50118
   },
   {
     "nick": "explorer",
@@ -60,7 +66,8 @@
     "repository": "https://github.com/anthropics/skills",
     "category": "exploration",
     "tools": "Read, Grep, Glob",
-    "model": "haiku"
+    "model": "haiku",
+    "stars": 50118
   },
   {
     "nick": "pr-reviewer",
@@ -69,7 +76,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "development",
     "tools": "Read, Grep, Glob, Bash",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 8554
   },
   {
     "nick": "architect",
@@ -78,7 +86,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "design",
     "tools": "Read, Grep, Glob, Write",
-    "model": "opus"
+    "model": "opus",
+    "stars": 8554
   },
   {
     "nick": "performance-optimizer",
@@ -87,7 +96,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "optimization",
     "tools": "Read, Edit, Bash, Grep, Glob",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 8554
   },
   {
     "nick": "api-designer",
@@ -96,7 +106,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "design",
     "tools": "Read, Write, Grep, Glob",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 8554
   },
   {
     "nick": "database-expert",
@@ -105,7 +116,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "data",
     "tools": "Bash, Read, Write",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 8554
   },
   {
     "nick": "devops-engineer",
@@ -114,7 +126,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "infrastructure",
     "tools": "Read, Write, Edit, Bash, Grep, Glob",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 8554
   },
   {
     "nick": "tech-writer",
@@ -123,7 +136,8 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "documentation",
     "tools": "Read, Write, Grep, Glob",
-    "model": "haiku"
+    "model": "haiku",
+    "stars": 8554
   },
   {
     "nick": "ux-reviewer",
@@ -132,6 +146,7 @@
     "repository": "https://github.com/VoltAgent/awesome-claude-code-subagents",
     "category": "design",
     "tools": "Read, Grep, Glob",
-    "model": "sonnet"
+    "model": "sonnet",
+    "stars": 8554
   }
 ]
