@@ -297,7 +297,8 @@ function handleSkillCommand(subcommand, args) {
       break;
 
     case 'sign':
-      const signSkillArg = args[0];
+      // Default to current directory if no argument
+      const signSkillArg = args[0] || '.';
       let signPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
 
       // Try git config if no privkey provided
@@ -307,16 +308,32 @@ function handleSkillCommand(subcommand, args) {
         } catch {}
       }
 
-      if (!signSkillArg) {
-        console.error('Error: Skill name or path required');
-        console.error('Example: aam skill sign my-skill --repo owner/repo');
-        process.exit(1);
-      }
-
       if (!signPrivkey) {
         console.error('Error: Private key required');
         console.error('Use --privkey <hex>, set AAM_PRIVKEY, or run: npm init agent');
         process.exit(1);
+      }
+
+      // Get repo - from flag, git remote, or prompt
+      let signRepo = argv.repo;
+      if (!signRepo) {
+        try {
+          const remoteUrl = execSync('git config --get remote.origin.url', { encoding: 'utf8' }).trim();
+          // Parse GitHub URL: git@github.com:owner/repo.git or https://github.com/owner/repo.git
+          const match = remoteUrl.match(/github\.com[:/]([^/]+\/[^/]+?)(?:\.git)?$/);
+          if (match) signRepo = match[1];
+        } catch {}
+      }
+      if (!signRepo) {
+        const inquirer = (await import('inquirer')).default;
+        const answer = await inquirer.prompt([{
+          type: 'input',
+          name: 'repo',
+          message: 'GitHub repo (owner/repo):',
+          validate: input => input.includes('/') || 'Format: owner/repo'
+        }]);
+        signRepo = answer.repo;
+        console.log(`\nTip: Next time use: aam skill sign --repo ${signRepo}\n`);
       }
 
       // Find skill path
@@ -328,7 +345,7 @@ function handleSkillCommand(subcommand, args) {
       }
 
       const signResult = signSkill(signSkillPath, signPrivkey, {
-        repo: argv.repo,
+        repo: signRepo,
         version: argv.version
       });
 
@@ -583,7 +600,8 @@ function handleAgentCommand(subcommand, args) {
       break;
 
     case 'sign':
-      const signAgentArg = args[0];
+      // Default to current directory if no argument
+      const signAgentArg = args[0] || '.';
       let signAgentPrivkey = argv.privkey || process.env.AAM_PRIVKEY;
 
       // Try git config if no privkey provided
@@ -593,16 +611,31 @@ function handleAgentCommand(subcommand, args) {
         } catch {}
       }
 
-      if (!signAgentArg) {
-        console.error('Error: Agent name or path required');
-        console.error('Example: aam agent sign my-agent --repo owner/repo');
-        process.exit(1);
-      }
-
       if (!signAgentPrivkey) {
         console.error('Error: Private key required');
         console.error('Use --privkey <hex>, set AAM_PRIVKEY, or run: npm init agent');
         process.exit(1);
+      }
+
+      // Get repo - from flag, git remote, or prompt
+      let signAgentRepo = argv.repo;
+      if (!signAgentRepo) {
+        try {
+          const remoteUrl = execSync('git config --get remote.origin.url', { encoding: 'utf8' }).trim();
+          const match = remoteUrl.match(/github\.com[:/]([^/]+\/[^/]+?)(?:\.git)?$/);
+          if (match) signAgentRepo = match[1];
+        } catch {}
+      }
+      if (!signAgentRepo) {
+        const inquirer = (await import('inquirer')).default;
+        const answer = await inquirer.prompt([{
+          type: 'input',
+          name: 'repo',
+          message: 'GitHub repo (owner/repo):',
+          validate: input => input.includes('/') || 'Format: owner/repo'
+        }]);
+        signAgentRepo = answer.repo;
+        console.log(`\nTip: Next time use: aam agent sign --repo ${signAgentRepo}\n`);
       }
 
       // Find agent path
@@ -614,7 +647,7 @@ function handleAgentCommand(subcommand, args) {
       }
 
       const signAgentResult = signAgent(signAgentPath, signAgentPrivkey, {
-        repo: argv.repo,
+        repo: signAgentRepo,
         version: argv.version
       });
 

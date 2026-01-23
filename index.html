@@ -199,6 +199,150 @@
       color: var(--accent);
     }
 
+    /* Quick Start */
+    .quickstart {
+      padding: 3rem 0;
+      background: white;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .step-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      position: relative;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-card h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .step-card p {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .step-card .code-block {
+      position: relative;
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.75rem 2.5rem 0.75rem 0.875rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      color: var(--green);
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .quickstart-result {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .result-arrow {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .result-box {
+      max-width: 400px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 2px solid var(--green);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: left;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+
+    .result-title {
+      font-weight: 700;
+      color: #166534;
+    }
+
+    .result-content {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.75rem;
+      background: white;
+      border-radius: 6px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .result-line {
+      margin-bottom: 0.25rem;
+      color: var(--text);
+    }
+
+    .result-line .dim {
+      color: var(--text-dim);
+    }
+
+    .result-footer {
+      font-size: 0.8125rem;
+      color: #166534;
+    }
+
+    .result-footer code {
+      background: white;
+      color: var(--green);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* Features */
     .features {
       padding: 3rem 0;
@@ -673,10 +817,72 @@
       <div class="install-box">
         <div>
           <span class="prompt">$</span>
-          <span class="cmd">npm</span> install
+          <span class="cmd">npm</span> install -g
           <span class="pkg">aam</span>
         </div>
         <button class="copy-btn" onclick="copyInstall()">Copy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="quickstart">
+    <div class="container">
+      <div class="section-header">
+        <h2>Quick Start</h2>
+        <p>Create a cryptographically signed agent in 3 commands</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Create Identity</h3>
+          <p>Generate a did:nostr identity for your agent. Private key is stored securely in git config.</p>
+          <div class="code-block">
+            <code>npm init agent</code>
+            <button class="copy-icon" onclick="copyToClipboard('npm init agent', this)" title="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Create a Skill</h3>
+          <p>Write a SKILL.md file with instructions for your agent. Can be as simple as one line.</p>
+          <div class="code-block">
+            <code>echo 'Respond in haiku' > SKILL.md</code>
+            <button class="copy-icon" onclick="copyToClipboard(&quot;echo 'Respond in haiku' > SKILL.md&quot;, this)" title="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Sign & Publish</h3>
+          <p>Cryptographically sign your skill. Repo is auto-detected from git remote, or you'll be prompted.</p>
+          <div class="code-block">
+            <code>aam skill sign</code>
+            <button class="copy-icon" onclick="copyToClipboard('aam skill sign', this)" title="Copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="quickstart-result">
+        <div class="result-arrow">↓</div>
+        <div class="result-box">
+          <div class="result-header">
+            <span class="result-icon">✓</span>
+            <span class="result-title">Cryptographically Verified</span>
+          </div>
+          <div class="result-content">
+            <div class="result-line"><span class="dim">Signed by:</span> did:nostr:npub1...</div>
+            <div class="result-line"><span class="dim">Hash:</span> f4adb394757e9f95...</div>
+            <div class="result-line"><span class="dim">Signature:</span> .aam.sig</div>
+          </div>
+          <div class="result-footer">
+            Others install with: <code>aam skill you/repo --verify</code>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -918,7 +1124,7 @@
     }
 
     function copyInstall() {
-      navigator.clipboard.writeText('npm install aam');
+      navigator.clipboard.writeText('npm install -g aam');
       const btn = document.querySelector('.copy-btn');
       btn.textContent = 'Copied!';
       setTimeout(() => btn.textContent = 'Copy', 2000);
