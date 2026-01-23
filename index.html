@@ -542,29 +542,30 @@
       margin-top: 1rem;
       padding-top: 1rem;
       border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
 
-    .card-install code {
+    .card-install .code-block {
+      position: relative;
       background: var(--bg);
       border: 1px solid var(--border);
-      padding: 0.625rem 0.875rem;
+      padding: 0.75rem 2.5rem 0.75rem 0.875rem;
       border-radius: 8px;
       font-size: 0.8125rem;
       color: var(--green);
-      flex: 1;
       font-family: 'SF Mono', Monaco, monospace;
     }
 
     .copy-icon {
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      transform: translateY(-50%);
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 0.25rem;
       color: var(--text-dim);
-      opacity: 0.5;
+      opacity: 0.4;
       transition: opacity 0.2s, color 0.2s;
     }
 
@@ -576,6 +577,7 @@
     .copy-icon svg {
       width: 16px;
       height: 16px;
+      display: block;
     }
 
     .copy-icon.copied {
@@ -860,10 +862,12 @@
           </div>
           ${repoShort ? `
           <div class="card-install">
-            <code>${installCmd} ${escapeHtml(repoShort)}</code>
-            <button class="copy-icon" onclick="copyToClipboard('${installCmd} ${escapeHtml(repoShort)}', this)" title="Copy">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-            </button>
+            <div class="code-block">
+              ${installCmd} ${escapeHtml(repoShort)}
+              <button class="copy-icon" onclick="copyToClipboard('${installCmd} ${escapeHtml(repoShort)}', this)" title="Copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              </button>
+            </div>
           </div>
           ` : ''}
         </div>
