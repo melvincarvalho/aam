@@ -126,7 +126,7 @@ function parseSkillFromArgs (args) {
 }
 
 // Skill subcommand handler
-function handleSkillCommand(subcommand, args) {
+async function handleSkillCommand(subcommand, args) {
   // If subcommand contains '/' or starts with 'http', treat as implicit add
   if (subcommand && (subcommand.includes('/') || subcommand.startsWith('http'))) {
     const repoArg = subcommand;
@@ -325,6 +325,13 @@ function handleSkillCommand(subcommand, args) {
         } catch {}
       }
       if (!signRepo) {
+        // Check if we're in an interactive terminal
+        if (!process.stdin.isTTY) {
+          console.error('Error: --repo flag required in non-interactive mode');
+          console.error('Usage: aam skill sign <name> --repo <owner/repo>');
+          console.error('Example: aam skill sign my-skill --repo myuser/my-skill');
+          process.exit(1);
+        }
         const inquirer = (await import('inquirer')).default;
         const answer = await inquirer.prompt([{
           type: 'input',
@@ -426,7 +433,7 @@ function handleSkillCommand(subcommand, args) {
 }
 
 // Agents subcommand handler
-function handleAgentCommand(subcommand, args) {
+async function handleAgentCommand(subcommand, args) {
   // If subcommand contains '/' or starts with 'http', treat as implicit add
   if (subcommand && (subcommand.includes('/') || subcommand.startsWith('http'))) {
     const repoArg = subcommand;
@@ -627,6 +634,13 @@ function handleAgentCommand(subcommand, args) {
         } catch {}
       }
       if (!signAgentRepo) {
+        // Check if we're in an interactive terminal
+        if (!process.stdin.isTTY) {
+          console.error('Error: --repo flag required in non-interactive mode');
+          console.error('Usage: aam agent sign <name> --repo <owner/repo>');
+          console.error('Example: aam agent sign my-agent --repo myuser/my-agent');
+          process.exit(1);
+        }
         const inquirer = (await import('inquirer')).default;
         const answer = await inquirer.prompt([{
           type: 'input',
@@ -733,12 +747,18 @@ const command = argv._[0];
 switch (command) {
   case 'skill':
   case 'skills':
-    handleSkillCommand(argv._[1], argv._.slice(2));
+    handleSkillCommand(argv._[1], argv._.slice(2)).catch(err => {
+      console.error('Error:', err.message);
+      process.exit(1);
+    });
     break;
 
   case 'agent':
   case 'agents':
-    handleAgentCommand(argv._[1], argv._.slice(2));
+    handleAgentCommand(argv._[1], argv._.slice(2)).catch(err => {
+      console.error('Error:', err.message);
+      process.exit(1);
+    });
     break;
 
   // Legacy commands (keep for backwards compatibility)
@@ -769,12 +789,18 @@ switch (command) {
 
   case 'list':
     console.log('Note: Use "aam skills list" instead');
-    handleSkillCommand('list', []);
+    handleSkillCommand('list', []).catch(err => {
+      console.error('Error:', err.message);
+      process.exit(1);
+    });
     break;
 
   case 'remove':
     console.log('Note: Use "aam skills remove" instead');
-    handleSkillCommand('remove', argv._.slice(1));
+    handleSkillCommand('remove', argv._.slice(1)).catch(err => {
+      console.error('Error:', err.message);
+      process.exit(1);
+    });
     break;
 
   case 'remote':
