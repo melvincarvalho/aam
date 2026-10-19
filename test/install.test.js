@@ -178,6 +178,8 @@ describe('a skill is a directory', () => {
     assert.match(capped.error, /over the cap/);
     const down = await fetchSkillTree('o', 'r', 'main', 'skills/x', { fetch: async () => ({ ok: false, status: 403 }) });
     assert.match(down.error, /HTTP 403/);
+    const trunc = await fetchSkillTree('o', 'r', 'main', 'skills/x', { fetch: async (url) => url.includes('/git/trees/') ? { ok: true, json: async () => ({ ...tree, truncated: true }) } : { ok: true, arrayBuffer: async () => new ArrayBuffer(1) } });
+    assert.strictEqual(trunc.truncated, true);                        // surfaced, so install can warn
   });
 
   test('a local --skill install copies the whole skill directory; a root install copies only the conventional dirs', async () => {
