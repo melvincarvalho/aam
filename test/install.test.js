@@ -93,3 +93,33 @@ describe('skillDescription', () => {
     assert.strictEqual(skillDescription('# x\n\nPlain.\n'), 'Plain.');
   });
 });
+
+describe('review fixes', () => {
+  test('a tree with no root SKILL.md (a cloned monorepo) is unsigned, not invalid, and is kept', async () => {
+    const { finishInstall } = await import('../lib/index.js');
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'aam-clone-'));
+    fs.mkdirSync(path.join(dir, 'skills', 'a'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'skills', 'a', 'SKILL.md'), '# a\n');
+    const r = finishInstall(dir, { name: 'repo', repo: 'o/r' }, {}, { repo: 'o/r' });
+    assert.ok(r.success, r.error);
+    assert.strictEqual(r.signature.status, 'unsigned');
+    assert.ok(fs.existsSync(path.join(dir, 'skills', 'a', 'SKILL.md')));
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  test('a --skill install remembers its skill name for update', async () => {
+    const { parseRepo } = await import('../lib/index.js');
+    // the light path records skillInfo.skill = subpath; the local path mirrors it through parseRepo
+    assert.strictEqual(parseRepo('o/r', { skill: 'alpha' }).subpath, 'alpha');
+    const src = path.join(os.tmpdir(), `aam-src-${Date.now()}`);
+    fs.mkdirSync(path.join(src, 'skills', 'alpha'), { recursive: true });
+    fs.writeFileSync(path.join(src, 'skills', 'alpha', 'SKILL.md'), '---\nname: alpha\ndescription: a\n---\n# a\n');
+    const work = fs.mkdtempSync(path.join(os.tmpdir(), 'aam-upd-'));
+    const cwd = process.cwd(); process.chdir(work);
+    try {
+      const r = await addFromRepo(`file://${src}`, { skill: 'alpha' });
+      assert.ok(r.success, r.error);
+      assert.strictEqual(r.skill.name, 'alpha');
+    } finally { process.chdir(cwd); fs.rmSync(work, { recursive: true, force: true }); fs.rmSync(src, { recursive: true, force: true }); }
+  });
+});
