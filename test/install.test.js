@@ -139,3 +139,70 @@ describe('signatureStatus is one answer everywhere', () => {
     } finally { process.chdir(cwd); fs.rmSync(work, { recursive: true, force: true }); }
   });
 });
+
+describe('a skill is a directory', () => {
+  test('skillTreeFilter: everything under a --skill directory; only the conventional dirs beside a root SKILL.md', async () => {
+    const { skillTreeFilter } = await import('../lib/index.js');
+    assert.strictEqual(skillTreeFilter('remotion-render/REFERENCE.md', true), true);
+    assert.strictEqual(skillTreeFilter('SKILL.md', true), false);
+    assert.strictEqual(skillTreeFilter('../x', true), false);
+    assert.strictEqual(skillTreeFilter('/etc/x', true), false);
+    assert.strictEqual(skillTreeFilter('references/a.md', false), true);
+    assert.strictEqual(skillTreeFilter('scripts/run.sh', false), true);
+    assert.strictEqual(skillTreeFilter('README.md', false), false);
+    assert.strictEqual(skillTreeFilter('package.json', false), false);
+  });
+
+  test('fetchSkillTree lists one tree and fetches the files under the skill directory, within caps', async () => {
+    const { fetchSkillTree } = await import('../lib/index.js');
+    const calls = [];
+    const tree = { tree: [
+      { type: 'blob', path: 'skills/x/SKILL.md', size: 10 },
+      { type: 'blob', path: 'skills/x/remotion-render/REFERENCE.md', size: 20 },
+      { type: 'blob', path: 'skills/x/assets/a.png', size: 30 },
+      { type: 'blob', path: 'skills/y/SKILL.md', size: 10 },
+      { type: 'tree', path: 'skills/x/assets', size: 0 },
+      { type: 'blob', path: 'README.md', size: 5 },
+    ] };
+    const fetch = async (url) => {
+      calls.push(url);
+      if (url.includes('/git/trees/')) return { ok: true, json: async () => tree };
+      return { ok: true, arrayBuffer: async () => new TextEncoder().encode(`body of ${url.split('/').pop()}`).buffer };
+    };
+    const r = await fetchSkillTree('o', 'r', 'main', 'skills/x', { fetch });
+    assert.strictEqual(r.error, undefined);
+    assert.deepStrictEqual(r.files.map((f) => f.path).sort(), ['assets/a.png', 'remotion-render/REFERENCE.md']);
+    assert.strictEqual(calls.filter((u) => u.includes('/git/trees/')).length, 1);
+    assert.match(calls[0], /api\.github\.com\/repos\/o\/r\/git\/trees\/main\?recursive=1/);
+    const capped = await fetchSkillTree('o', 'r', 'main', 'skills/x', { fetch, maxFiles: 1 });
+    assert.match(capped.error, /over the cap/);
+    const down = await fetchSkillTree('o', 'r', 'main', 'skills/x', { fetch: async () => ({ ok: false, status: 403 }) });
+    assert.match(down.error, /HTTP 403/);
+    const trunc = await fetchSkillTree('o', 'r', 'main', 'skills/x', { fetch: async (url) => url.includes('/git/trees/') ? { ok: true, json: async () => ({ ...tree, truncated: true }) } : { ok: true, arrayBuffer: async () => new ArrayBuffer(1) } });
+    assert.strictEqual(trunc.truncated, true);                        // surfaced, so install can warn
+  });
+
+  test('a local --skill install copies the whole skill directory; a root install copies only the conventional dirs', async () => {
+    const work = fs.mkdtempSync(path.join(os.tmpdir(), 'aam-tree-'));
+    const cwd = process.cwd(); process.chdir(work);
+    try {
+      const src = path.join(work, 'src');
+      fs.mkdirSync(path.join(src, 'skills', 'x', 'remotion-render'), { recursive: true });
+      fs.writeFileSync(path.join(src, 'skills', 'x', 'SKILL.md'), '# x\n');
+      fs.writeFileSync(path.join(src, 'skills', 'x', 'remotion-render', 'REFERENCE.md'), 'render\n');
+      const r = await addFromRepo(`file://${src}`, { skill: 'x' });
+      assert.ok(r.success, r.error);
+      assert.strictEqual(fs.readFileSync(path.join(work, '.claude/skills/x/remotion-render/REFERENCE.md'), 'utf8'), 'render\n');
+      assert.deepStrictEqual(r.skill.files.map((f) => f.path), ['remotion-render/REFERENCE.md']);
+      const root = path.join(work, 'rootskill');
+      fs.mkdirSync(path.join(root, 'references'), { recursive: true });
+      fs.writeFileSync(path.join(root, 'SKILL.md'), '# root\n');
+      fs.writeFileSync(path.join(root, 'references', 'r.md'), 'ref\n');
+      fs.writeFileSync(path.join(root, 'README.md'), 'not a skill file\n');
+      const r2 = await addFromRepo(`file://${root}`, {});
+      assert.ok(r2.success, r2.error);
+      assert.ok(fs.existsSync(path.join(work, '.claude/skills/rootskill/references/r.md')));
+      assert.ok(!fs.existsSync(path.join(work, '.claude/skills/rootskill/README.md')));
+    } finally { process.chdir(cwd); fs.rmSync(work, { recursive: true, force: true }); }
+  });
+});
