@@ -85,6 +85,8 @@ Options:
   --force                   Overwrite existing skill/agent
   --full                    Clone full repo instead of just SKILL.md/agent.md
   --verify                  Verify signature after install
+  --skill <name>            One skill out of a monorepo (skills/<name>/SKILL.md), as skills.sh lays them out
+  --vouch                   Sign the installed skill with your own key: you read it and run it
   --repo <owner/repo>       GitHub repo for signing (required for sign command)
   --privkey <hex>           Private key for signing (or set AAM_PRIVKEY env var)
 
@@ -97,6 +99,7 @@ Examples:
   aam skill anthropics/skills                 # Install to ./.claude/skills/
   aam skill anthropics/skills@v1.0.0          # Install specific version
   aam skill anthropics/skills --verify        # Install and verify signature
+  aam skill remotion-dev/skills --skill remotion-best-practices   # one skill from a monorepo
   aam skill -g anthropics/skills              # Install to ~/.claude/skills/
   aam skill sign my-skill --repo user/repo    # Sign a skill (needs AAM_PRIVKEY)
   aam skill verify my-skill                   # Verify skill signature
@@ -168,6 +171,20 @@ function parseSkillFromArgs (args) {
   return skill;
 }
 
+// The key for --vouch: flag, env, or the repo's agent key
+function resolvePrivkey() {
+  let k = argv.privkey || process.env.AAM_PRIVKEY;
+  if (!k) { try { k = execSync('git config nostr.privkey', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch {} }
+  return k || undefined;
+}
+function describeSignature(sig) {
+  if (!sig) return 'unknown';
+  if (sig.status === 'verified') return `signed by did:nostr:${sig.pubkey}`;
+  if (sig.status === 'vouched') return `vouched by did:nostr:${sig.pubkey} (your key; the publisher did not sign)`;
+  if (sig.status === 'invalid') return `does not verify (${sig.error})`;
+  return 'unsigned';
+}
+
 // Skill subcommand handler
 async function handleSkillCommand(subcommand, args) {
   // If subcommand contains '/' or starts with 'http', treat as implicit add
@@ -175,8 +192,8 @@ async function handleSkillCommand(subcommand, args) {
     const repoArg = subcommand;
     const isGlobal = argv.g || argv.global;
     const shouldVerify = argv.verify;
-    console.log(`Installing skill from ${repoArg}${isGlobal ? ' (global)' : ''}...`);
-    addFromRepo(repoArg, { force: argv.force, full: argv.full, global: isGlobal }).then(installResult => {
+    console.log(`Installing skill from ${repoArg}${argv.skill ? ` (skill ${argv.skill})` : ''}${isGlobal ? ' (global)' : ''}...`);
+    addFromRepo(repoArg, { force: argv.force, full: argv.full, global: isGlobal, skill: argv.skill, vouch: argv.vouch, privkey: argv.vouch ? resolvePrivkey() : undefined }).then(installResult => {
       if (installResult.success) {
         console.log(`\n✓ Successfully installed "${installResult.skill.name}"${isGlobal ? ' globally' : ''}`);
         console.log(`  Location: ${installResult.path}`);
@@ -184,8 +201,9 @@ async function handleSkillCommand(subcommand, args) {
           console.log(`  Description: ${installResult.skill.description}`);
         }
         if (installResult.skill.installMode) {
-          console.log(`  Mode: ${installResult.skill.installMode}`);
+          console.log(`  Mode: ${installResult.skill.installMode}${installResult.skill.sourcePath ? ` (${installResult.skill.sourcePath})` : ''}`);
         }
+        console.log(`  Signature: ${describeSignature(installResult.signature)}`);
 
         // Verify signature if requested
         if (shouldVerify) {
@@ -226,6 +244,8 @@ async function handleSkillCommand(subcommand, args) {
             let sigIcon = '';
             if (skill.signatureStatus === 'verified') {
               sigIcon = '✓ ';
+            } else if (skill.signatureStatus === 'vouched') {
+              sigIcon = '✓ ';
             } else if (skill.signatureStatus === 'unsigned') {
               sigIcon = '⚠ ';
             } else if (skill.signatureStatus === 'invalid') {
@@ -238,13 +258,17 @@ async function handleSkillCommand(subcommand, args) {
             if (skill.source) {
               console.log(`    Source: ${skill.source}`);
             }
-            if (skill.signedBy) {
-              console.log(`    Signed by: ${skill.signedBy.slice(0, 16)}...`);
+            if (skill.signatureStatus === 'vouched') {
+              console.log(`    Vouched by: did:nostr:${skill.signedBy}`);
+            } else if (skill.signedBy) {
+              console.log(`    Signed by: did:nostr:${skill.signedBy}`);
+            } else if (skill.signatureStatus === 'unsigned') {
+              console.log(`    Unsigned`);
             }
             console.log();
           });
           console.log(`Skills directory: ${listResult.path}`);
-          console.log(`Legend: ✓ verified  ⚠ unsigned  ✗ invalid`);
+          console.log(`Legend: ✓ signed or vouched  ⚠ unsigned  ✗ invalid`);
         }
       } else {
         console.error('Error:', listResult.error);
@@ -456,6 +480,8 @@ async function handleSkillCommand(subcommand, args) {
       console.log('  -g, --global               Install/list/remove globally (~/.claude/skills/)');
       console.log('  --force                    Overwrite existing skill');
       console.log('  --full                     Clone full repo instead of just SKILL.md');
+      console.log('  --skill <name>             One skill out of a monorepo (skills/<name>/SKILL.md)');
+      console.log('  --vouch                    Sign the installed skill with your own key');
       console.log('');
       console.log('Examples:');
       console.log('  aam skills anthropics/skills       # Install to ./.claude/skills/');
@@ -814,7 +840,7 @@ switch (command) {
 
     console.log('Note: Use "aam skills <repo>" instead');
     console.log(`Installing skill from ${repoArg}...`);
-    addFromRepo(repoArg, { force: argv.force, full: argv.full }).then(installResult => {
+    addFromRepo(repoArg, { force: argv.force, full: argv.full, skill: argv.skill, vouch: argv.vouch, privkey: argv.vouch ? resolvePrivkey() : undefined }).then(installResult => {
       if (installResult.success) {
         console.log(`\n✓ Successfully installed "${installResult.skill.name}"`);
         console.log(`  Location: ${installResult.path}`);

@@ -81,6 +81,26 @@ addSkill(skill)
 
 ---
 
+### Install a skill
+
+```bash
+aam skills owner/repo                                   # a repo with SKILL.md at its root
+aam skills remotion-dev/skills --skill remotion-best-practices   # one skill out of a monorepo (skills/<name>/SKILL.md)
+aam skills ./path --skill name                          # the same from a local checkout
+aam skills owner/repo --vouch                           # sign what you installed with your own key
+```
+
+Skills land in `.claude/skills/<name>/` (or `~/.claude/skills` with `-g`), which Claude Code reads directly. A skill
+installed this way is byte-identical to one installed by `npx skills`; aam adds the one thing that ecosystem lacks,
+who signed it. Every install and every `aam skills list` ends with one of:
+
+- `signed by did:nostr:<key>`: a `.aam.sig` beside the skill, verified
+- `vouched by did:nostr:<key>`: your own signature, made with `--vouch`, meaning you read it and run it
+- `unsigned`: no signature at all
+- `does not verify`: refused, unless `--force`
+
+`--vouch` takes the key from `--privkey`, `AAM_PRIVKEY`, or `git config nostr.privkey` (what `npm create agent@latest` writes).
+
 ### Interactive Wizard
 
 AAM includes an interactive wizard-style interface to guide you through the process of creating and managing agents with a colorful and user-friendly CLI:
