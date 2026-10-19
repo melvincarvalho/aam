@@ -123,3 +123,19 @@ describe('review fixes', () => {
     } finally { process.chdir(cwd); fs.rmSync(work, { recursive: true, force: true }); fs.rmSync(src, { recursive: true, force: true }); }
   });
 });
+
+describe('signatureStatus is one answer everywhere', () => {
+  test('list says unsigned for a package-only install with no root SKILL.md', async () => {
+    const { signatureStatus } = await import('../lib/index.js');
+    const work = fs.mkdtempSync(path.join(os.tmpdir(), 'aam-pkg-'));
+    const cwd = process.cwd(); process.chdir(work);
+    try {
+      const dir = path.join(work, '.claude', 'skills', 'pkg');
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, 'package.json'), JSON.stringify({ name: 'pkg', version: '1.0.0' }));
+      assert.deepStrictEqual(signatureStatus(dir), { status: 'unsigned' });
+      const list = listInstalled({});
+      assert.deepStrictEqual(list.skills.map((s) => [s.name, s.signatureStatus]), [['pkg', 'unsigned']]);
+    } finally { process.chdir(cwd); fs.rmSync(work, { recursive: true, force: true }); }
+  });
+});
